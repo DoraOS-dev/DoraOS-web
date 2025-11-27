@@ -1,49 +1,27 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-    <meta charset="UTF-8" />
-    <title>Video poziv - Dora Asistent</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <title>Video poziv - Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="app-shell">
-<header class="sub-header">
-    <a href="index.html" class="btn-back">← Natrag na početnu</a>
-    <h1>Video poziv</h1>
-</header>
+<body>
+  <div class="app-shell">
+    
+<div class="subpage">
+  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
+  <div class="subpage-card">
+    <h2 class="subpage-title">Video poziv</h2>
+    <p class="subpage-subtitle">
+      U ovoj verziji ne radimo pravi video-poziv, ali ovdje možete objasniti roditeljima kako jednostavno
+      pokrenuti poziv.
+    </p>
+    <div id="video-info" class="section-subtitle" style="line-height:1.5;"></div>
+  </div>
+</div>
 
-<main class="app-main">
-    <section class="card">
-        <h2 class="card-title">Jednostavan video poziv</h2>
-        <p class="card-subtitle">
-            Ovdje možete spremiti linkove za video poziv (WhatsApp, Viber, Messenger, Zoom...).
-            Kada roditelji kliknu na gumb, otvorit će se odgovarajuća aplikacija ili web stranica.
-        </p>
-
-        <div class="form-grid">
-            <div class="form-column">
-                <label for="linkDarko">Poziv s Darkom</label>
-                <input id="linkDarko" type="url" placeholder="https://wa.me/385..." />
-                <button id="btnCallDarko" class="btn btn-teal full-width">Pozovi Darka</button>
-            </div>
-            <div class="form-column">
-                <label for="linkPatricia">Poziv s Patricijom / Renatom</label>
-                <input id="linkPatricia" type="url" placeholder="https://wa.me/385..." />
-                <button id="btnCallPatricia" class="btn btn-teal full-width">Pozovi djecu</button>
-            </div>
-        </div>
-
-        <div class="form-actions">
-            <button id="btnSaveVideo" class="btn btn-primary">Spremi linkove</button>
-            <span id="videoSaved" class="save-indicator"></span>
-        </div>
-
-        <p class="small-note">
-            Napomena: za rad ovih tipki potrebno je da aplikacija za poziv već bude instalirana na uređaju.
-        </p>
-    </section>
-</main>
-
-<script src="js/video.js"></script>
+  </div>
+  <script type="module" src="js/video.js"></script>
 </body>
 </html>

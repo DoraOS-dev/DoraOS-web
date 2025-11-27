@@ -1,54 +1,16 @@
-// Video linkovi
 
-function loadVideoLinks() {
-    try {
-        const raw = localStorage.getItem("dora_video");
-        return raw ? JSON.parse(raw) : {};
-    } catch {
-        return {};
-    }
+import { renderHeaderBasics } from "./app.js";
+
+function init() {
+    renderHeaderBasics();
+    const info = document.querySelector("#video-info");
+    if (!info) return;
+    info.innerHTML = `
+        Ovdje možete upisati upute kako pokrenuti video poziv (npr. WhatsApp, Viber, Messenger)
+        ili dodati poveznice na omiljene kontakte.<br/><br/>
+        U ovoj verziji aplikacije ne radimo pravi video‑poziv, nego samo pomažemo da osoba
+        jednostavno pronađe upute od obitelji.
+    `;
 }
 
-function saveVideoLinks(data) {
-    localStorage.setItem("dora_video", JSON.stringify(data));
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const linkDarko = document.getElementById("linkDarko");
-    const linkPatricia = document.getElementById("linkPatricia");
-    const btnSave = document.getElementById("btnSaveVideo");
-    const lblSaved = document.getElementById("videoSaved");
-    const btnCallDarko = document.getElementById("btnCallDarko");
-    const btnCallPatricia = document.getElementById("btnCallPatricia");
-
-    const data = loadVideoLinks();
-    if (linkDarko && data.darko) linkDarko.value = data.darko;
-    if (linkPatricia && data.patricia) linkPatricia.value = data.patricia;
-
-    btnSave?.addEventListener("click", () => {
-        saveVideoLinks({
-            darko: linkDarko?.value || "",
-            patricia: linkPatricia?.value || ""
-        });
-        if (lblSaved) {
-            lblSaved.textContent = "Linkovi su spremljeni.";
-            setTimeout(() => (lblSaved.textContent = ""), 2500);
-        }
-    });
-
-    btnCallDarko?.addEventListener("click", () => {
-        if (linkDarko && linkDarko.value) {
-            window.open(linkDarko.value, "_blank");
-        } else {
-            alert("Prvo upišite link za poziv s Darkom.");
-        }
-    });
-
-    btnCallPatricia?.addEventListener("click", () => {
-        if (linkPatricia && linkPatricia.value) {
-            window.open(linkPatricia.value, "_blank");
-        } else {
-            alert("Prvo upišite link za poziv s djecom.");
-        }
-    });
-});
+window.addEventListener("DOMContentLoaded", init);

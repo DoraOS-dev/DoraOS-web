@@ -1,33 +1,26 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-    <meta charset="UTF-8" />
-    <title>Vrijeme - Dora Asistent</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <title>Vrijeme - Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="app-shell">
-<header class="sub-header">
-    <a href="index.html" class="btn-back">← Natrag na početnu</a>
-    <h1>Vrijeme u Vrbniku</h1>
-</header>
-
-<main class="app-main">
-    <section class="card">
-        <h2 class="card-title">Trenutna prognoza</h2>
-        <div id="weather-detail-now" class="weather-now"></div>
-    </section>
-
-    <section class="card">
-        <h2 class="card-title">Sljedeća 3 dana</h2>
-        <div id="weather-detail-days" class="weather-next"></div>
-    </section>
-
-    <p class="weather-note">
-        Podaci se preuzimaju s Open-Meteo servisa na temelju geolokacije Vrbnika.
+<body>
+  <div class="app-shell">
+    
+<div class="subpage">
+  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
+  <div class="subpage-card">
+    <h2 class="subpage-title">Vrijeme u Vrbniku</h2>
+    <p class="subpage-subtitle">
+      Osnovna prognoza prikazana je na početnom ekranu. U ovoj verziji ovdje nudimo samo kratak opis.
     </p>
-</main>
+    <div id="weather-info" class="section-subtitle"></div>
+  </div>
+</div>
 
-<script src="js/weather.js"></script>
+  </div>
+  <script type="module" src="js/weather.js"></script>
 </body>
 </html>

@@ -1,162 +1,117 @@
-// Dora Asistent – glavna logika
 
-const PIN_CODE = "0038";
+// Shared Dora Asistent helpers
 
-// Datum i vrijeme
-function updateDateTime() {
-  const now = new Date();
-  const days = ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"];
-  const months = [
-    "siječnja",
-    "veljače",
-    "ožujka",
-    "travnja",
-    "svibnja",
-    "lipnja",
-    "srpnja",
-    "kolovoza",
-    "rujna",
-    "listopada",
-    "studenoga",
-    "prosinca"
-  ];
+export const PIN_CODE = "0000";
 
-  const dayName = days[now.getDay()];
-  const date = now.getDate();
-  const monthName = months[now.getMonth()];
-  const year = now.getFullYear();
-
-  const h = String(now.getHours()).padStart(2, "0");
-  const m = String(now.getMinutes()).padStart(2, "0");
-  const s = String(now.getSeconds()).padStart(2, "0");
-
-  const dateText = `${dayName}, ${date}. ${monthName} ${year}.`;
-  const timeText = `${h}:${m}:${s}`;
-
-  document.getElementById("date-text").textContent = dateText;
-  document.getElementById("time-text").textContent = timeText;
+export function $(selector, root = document) {
+    return root.querySelector(selector);
 }
 
-setInterval(updateDateTime, 1000);
-updateDateTime();
+export function $all(selector, root = document) {
+    return Array.from(root.querySelectorAll(selector));
+}
 
-// Navigacija
-document.querySelectorAll(".nav-button[data-target]").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const target = btn.getAttribute("data-target");
-    if (target) {
-      window.location.href = target;
+export function getTodayKey() {
+    const d = new Date();
+    return d.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
+export function loadJSON(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        return JSON.parse(raw);
+    } catch (e) {
+        console.warn("loadJSON failed", key, e);
+        return fallback;
     }
-  });
-});
+}
 
-// Tjedni pregled – localStorage
-const STORAGE_KEY = "doraMedicationWeek";
-
-function loadWeekState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return {
-        bozo: {},
-        kristina: {}
-      };
+export function saveJSON(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+        console.warn("saveJSON failed", key, e);
     }
-    return JSON.parse(raw);
-  } catch (e) {
-    console.error("Cannot parse week state", e);
-    return {
-      bozo: {},
-      kristina: {}
-    };
-  }
 }
 
-function saveWeekState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+export function formatDayShort(idx) {
+    // Monday-first labels in Croatian
+    const labels = ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"];
+    return labels[idx] ?? "?";
 }
 
-function renderWeekTable(state) {
-  const today = new Date().getDay(); // 0 ned...6 sub
-  document.querySelectorAll(".week-table td").forEach((td) => {
-    const person = td.dataset.person;
-    const day = Number(td.dataset.day);
-    const isToday = day === today;
+export function formatDayLong(date) {
+    return date.toLocaleDateString("hr-HR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+}
 
-    const taken = !!(state[person] && state[person][day]);
-    td.innerHTML = "";
-    const dot = document.createElement("span");
-    dot.className = "dot " + (taken ? "dot--on" : "dot--off");
-    td.appendChild(dot);
-
-    if (isToday) {
-      td.style.outline = "1px solid rgba(248, 250, 252, 0.6)";
-      td.style.outlineOffset = "2px";
-      td.title = "Danas";
-    } else {
-      td.style.outline = "none";
-      td.title = "";
+export function showToast(message) {
+    let el = document.querySelector(".toast");
+    if (!el) {
+        el = document.createElement("div");
+        el.className = "toast";
+        el.style.position = "fixed";
+        el.style.bottom = "18px";
+        el.style.left = "50%";
+        el.style.transform = "translateX(-50%)";
+        el.style.padding = "8px 14px";
+        el.style.borderRadius = "999px";
+        el.style.background = "rgba(15,23,42,0.95)";
+        el.style.border = "1px solid rgba(148,163,184,0.6)";
+        el.style.color = "#f9fafb";
+        el.style.fontSize = "13px";
+        el.style.zIndex = "50";
+        document.body.appendChild(el);
     }
-  });
+    el.textContent = message;
+    el.style.opacity = "1";
+    setTimeout(() => {
+        el.style.transition = "opacity 0.4s ease";
+        el.style.opacity = "0";
+    }, 2000);
 }
 
-const weekState = loadWeekState();
-renderWeekTable(weekState);
+export function renderHeaderBasics() {
+    // sound toggle restore
+    const soundToggle = document.querySelector("#sound-toggle");
+    if (soundToggle) {
+        const stored = localStorage.getItem("dora-sound-enabled");
+        if (stored !== null) {
+            soundToggle.checked = stored === "true";
+        } else {
+            soundToggle.checked = true;
+        }
+        soundToggle.addEventListener("change", () => {
+            localStorage.setItem("dora-sound-enabled", String(soundToggle.checked));
+        });
+    }
 
-function markToday(person) {
-  const today = new Date().getDay();
-  if (!weekState[person]) weekState[person] = {};
-  weekState[person][today] = true;
-  saveWeekState(weekState);
-  renderWeekTable(weekState);
+    // clock
+    const timeEl = document.querySelector("[data-clock-time]");
+    const dateEl = document.querySelector("[data-clock-date]");
+    function updateClock() {
+        const now = new Date();
+        if (timeEl) {
+            timeEl.textContent = now.toLocaleTimeString("hr-HR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
+        }
+        if (dateEl) {
+            dateEl.textContent = now.toLocaleDateString("hr-HR", {
+                weekday: "short",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+        }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
 }
-
-document.getElementById("btnBozo").addEventListener("click", () => {
-  markToday("bozo");
-});
-
-document.getElementById("btnKristina").addEventListener("click", () => {
-  markToday("kristina");
-});
-
-// PIN modal i postavke
-const pinModal = document.getElementById("pinModal");
-const settingsBtn = document.getElementById("settingsBtn");
-const pinInput = document.getElementById("pinInput");
-const pinError = document.getElementById("pinError");
-const pinOk = document.getElementById("pinOk");
-const pinCancel = document.getElementById("pinCancel");
-
-function openPinModal() {
-  pinModal.hidden = false;
-  pinError.hidden = true;
-  pinInput.value = "";
-  pinInput.focus();
-}
-
-function closePinModal() {
-  pinModal.hidden = true;
-}
-
-settingsBtn.addEventListener("click", openPinModal);
-
-pinCancel.addEventListener("click", closePinModal);
-
-pinOk.addEventListener("click", () => {
-  if (pinInput.value === PIN_CODE) {
-    pinError.hidden = true;
-    window.location.href = "settings.html";
-  } else {
-    pinError.hidden = false;
-    pinInput.focus();
-    pinInput.select();
-  }
-});
-
-pinInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    pinOk.click();
-  } else if (e.key === "Escape") {
-    closePinModal();
-  }
-});

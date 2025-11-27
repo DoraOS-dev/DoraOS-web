@@ -1,39 +1,45 @@
-// Poruke od obitelji
 
-function loadFamily() {
-    try {
-        const raw = localStorage.getItem("dora_family");
-        return raw ? JSON.parse(raw) : {};
-    } catch {
-        return {};
-    }
-}
+import { renderHeaderBasics, loadJSON, saveJSON, showToast } from "./app.js";
 
-function saveFamily(data) {
-    localStorage.setItem("dora_family", JSON.stringify(data));
-}
+const KEY = "dora-family-messages";
 
-document.addEventListener("DOMContentLoaded", () => {
-    const famShort = document.getElementById("famShort");
-    const famLong = document.getElementById("famLong");
-    const famNote = document.getElementById("famNote");
-    const btnSave = document.getElementById("btnSaveFamily");
-    const saved = document.getElementById("familySaved");
+function init() {
+    renderHeaderBasics();
+    const form = document.querySelector("#family-form");
+    const area = document.querySelector("#family-text");
+    const preview = document.querySelector("#family-preview");
 
-    const data = loadFamily();
-    if (famShort && data.short) famShort.value = data.short;
-    if (famLong && data.long) famLong.value = data.long;
-    if (famNote && data.note) famNote.value = data.note;
+    const stored = loadJSON(KEY, "");
+    if (area) area.value = stored;
 
-    btnSave?.addEventListener("click", () => {
-        saveFamily({
-            short: famShort?.value || "",
-            long: famLong?.value || "",
-            note: famNote?.value || ""
-        });
-        if (saved) {
-            saved.textContent = "Poruke su spremljene.";
-            setTimeout(() => (saved.textContent = ""), 2500);
+    function render(val) {
+        preview.innerHTML = "";
+        if (!val) {
+            const p = document.createElement("p");
+            p.className = "photo-empty";
+            p.textContent = "Obitelj još nije pripremila posebnu poruku.";
+            preview.appendChild(p);
+            return;
         }
+        const block = document.createElement("div");
+        block.style.borderRadius = "18px";
+        block.style.padding = "16px";
+        block.style.background = "rgba(15,23,42,0.95)";
+        block.style.border = "1px solid rgba(148,163,184,0.5)";
+        block.style.fontSize = "20px";
+        block.textContent = val;
+        preview.appendChild(block);
+    }
+
+    form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const val = area.value.trim();
+        saveJSON(KEY, val);
+        showToast("Poruka obitelji je spremljena.");
+        render(val);
     });
-});
+
+    render(stored);
+}
+
+window.addEventListener("DOMContentLoaded", init);

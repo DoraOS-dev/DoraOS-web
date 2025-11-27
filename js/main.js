@@ -1,231 +1,253 @@
-// Dora Asistent - glavna logika (početna stranica)
 
-const CORRECT_PIN = "0038";
+import { $, $all, getTodayKey, loadJSON, saveJSON, formatDayShort, renderHeaderBasics, showToast } from "./app.js";
 
-// Helper: format date key (YYYY-MM-DD)
-function dateKey(date = new Date()) {
-    return date.toISOString().slice(0, 10);
-}
+const MED_KEY = "dora-medications";
 
-// CLOCK
-function startClock() {
-    const dateEl = document.getElementById("clock-date");
-    const timeEl = document.getElementById("clock-time");
-    if (!dateEl || !timeEl) return;
-
-    function update() {
-        const now = new Date();
-        const formatterDate = new Intl.DateTimeFormat("hr-HR", {
-            weekday: "short",
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        });
-        const formatterTime = new Intl.DateTimeFormat("hr-HR", {
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-        dateEl.textContent = formatterDate.format(now);
-        timeEl.textContent = formatterTime.format(now);
+function initMedications() {
+    const todayKey = getTodayKey();
+    let data = loadJSON(MED_KEY, {});
+    if (!data[todayKey]) {
+        data[todayKey] = { bozo: false, kristina: false };
+        saveJSON(MED_KEY, data);
     }
-    update();
-    setInterval(update, 1000 * 30);
-}
 
-// SOUND TOGGLE (samo zapis u localStorage za buduće zvukove)
-function initSoundToggle() {
-    const toggle = document.getElementById("soundToggle");
-    if (!toggle) return;
+    const btnBozo = $("#btn-med-bozo");
+    const btnKristina = $("#btn-med-kristina");
 
-    const saved = localStorage.getItem("dora_sound");
-    if (saved === "on") toggle.checked = true;
-
-    toggle.addEventListener("change", () => {
-        localStorage.setItem("dora_sound", toggle.checked ? "on" : "off");
-    });
-}
-
-// MEDS LOG
-
-function loadMeds() {
-    try {
-        const raw = localStorage.getItem("dora_meds");
-        return raw ? JSON.parse(raw) : {};
-    } catch {
-        return {};
+    function markTaken(person) {
+        const d = loadJSON(MED_KEY, {});
+        const today = getTodayKey();
+        if (!d[today]) d[today] = { bozo: false, kristina: false };
+        d[today][person] = true;
+        saveJSON(MED_KEY, d);
+        updateWeekGrid();
+        showToast(person === "bozo" ? "Zabilježeno za Božu." : "Zabilježeno za Kristinu.");
     }
-}
 
-function saveMeds(data) {
-    localStorage.setItem("dora_meds", JSON.stringify(data));
-}
-
-function setTakenFor(person) {
-    const meds = loadMeds();
-    const key = dateKey();
-    meds[key] = meds[key] || { bozo: false, kristina: false };
-    meds[key][person] = true;
-    saveMeds(meds);
-    renderMedsTable();
-    updateMedStatusText();
-}
-
-function updateMedStatusText() {
-    const el = document.getElementById("medStatusText");
-    if (!el) return;
-    const meds = loadMeds();
-    const key = dateKey();
-    const today = meds[key] || { bozo: false, kristina: false };
-    let text = "Za danas još nije zabilježeno.";
-    if (today.bozo && today.kristina) {
-        text = "Za danas je zabilježeno da su Božo i Kristina popili lijek.";
-    } else if (today.bozo) {
-        text = "Za danas je zabilježeno da je Božo popio lijek.";
-    } else if (today.kristina) {
-        text = "Za danas je zabilježeno da je Kristina popila lijek.";
+    if (btnBozo) {
+        btnBozo.addEventListener("click", () => markTaken("bozo"));
     }
-    el.textContent = text;
+    if (btnKristina) {
+        btnKristina.addEventListener("click", () => markTaken("kristina"));
+    }
+
+    updateWeekGrid();
 }
 
-function renderMedsTable() {
-    const rowBozo = document.getElementById("rowBozo");
-    const rowKristina = document.getElementById("rowKristina");
-    if (!rowBozo || !rowKristina) return;
+function updateWeekGrid() {
+    const container = document.querySelector("[data-week-grid]");
+    if (!container) return;
 
-    const meds = loadMeds();
-    rowBozo.querySelectorAll("td").forEach(td => td.remove());
-    rowKristina.querySelectorAll("td").forEach(td => td.remove());
-
+    const ALL = loadJSON("dora-medications", {});
     const today = new Date();
-    const weekdayNames = ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"];
+    const weekRows = [];
 
-    // Show last 7 days starting Monday style but keep data aligned
-    const days = [];
-    for (let i = 0; i < 7; i++) {
+    for (let offset = 0; offset < 7; offset++) {
         const d = new Date(today);
-        d.setDate(today.getDate() - (6 - i));
-        days.push(d);
+        d.setDate(today.getDate() - (6 - offset)); // show Mon..Sun approx
+        const key = d.toISOString().slice(0, 10);
+        const weekdayIdx = (d.getDay() + 6) % 7; // convert Sunday=0 to Monday=0
+        const entry = ALL[key] || { bozo: false, kristina: false };
+
+        weekRows.push({
+            label: formatDayShort(weekdayIdx),
+            isToday: key === today.toISOString().slice(0, 10),
+            bozo: !!entry.bozo,
+            kristina: !!entry.kristina
+        });
     }
 
-    days.forEach(d => {
-        const key = d.toISOString().slice(0, 10);
-        const data = meds[key] || {};
-        const isToday = dateKey() === key;
-
-        const tdBozo = document.createElement("td");
-        const tdKristina = document.createElement("td");
-
-        const dotBozo = document.createElement("span");
-        const dotKristina = document.createElement("span");
-
-        dotBozo.classList.add("dot");
-        dotKristina.classList.add("dot");
-
-        if (data.bozo === true) dotBozo.classList.add("dot-taken");
-        else if (data.bozo === false && key in meds) dotBozo.classList.add("dot-missing");
-        else dotBozo.classList.add("dot-empty");
-
-        if (data.kristina === true) dotKristina.classList.add("dot-taken");
-        else if (data.kristina === false && key in meds) dotKristina.classList.add("dot-missing");
-        else dotKristina.classList.add("dot-empty");
-
-        if (!(key in meds)) {
-            // if there is no entry at all, keep it "empty"
-        }
-
-        tdBozo.appendChild(dotBozo);
-        tdKristina.appendChild(dotKristina);
-
-        if (isToday) {
-            tdBozo.style.outline = "2px solid rgba(250,250,250,0.6)";
-            tdBozo.style.outlineOffset = "1px";
-            tdKristina.style.outline = "2px solid rgba(250,250,250,0.6)";
-            tdKristina.style.outlineOffset = "1px";
-        }
-
-        rowBozo.appendChild(tdBozo);
-        rowKristina.appendChild(tdKristina);
+    container.innerHTML = "";
+    weekRows.forEach((row) => {
+        const el = document.createElement("div");
+        el.className = "week-row";
+        el.innerHTML = `
+            <div>${row.label}</div>
+            <div class="dot-row">
+                <div class="dot ${row.bozo ? "dot--taken" : ""} ${row.isToday ? "dot--today" : ""}" title="Božo"></div>
+                <div class="dot ${row.kristina ? "dot--taken" : ""} ${row.isToday ? "dot--today" : ""}" title="Kristina"></div>
+            </div>
+        `;
+        container.appendChild(el);
     });
 }
 
-// SETTINGS / PIN
+async function initWeather() {
+    const tempEl = $("[data-weather-temp]");
+    const descEl = $("[data-weather-desc]");
+    const feelsEl = $("[data-weather-feels]");
+    const windEl = $("[data-weather-wind]");
+    const humEl = $("[data-weather-humidity]");
+    const updatedEl = $("[data-weather-updated]");
+    const forecastEl = $("[data-weather-forecast]");
+    const btnRefresh = $("#btn-weather-refresh");
+
+    async function fetchWeather() {
+        try {
+            const lat = 45.083; // approximate Vrbnik
+            const lon = 14.666;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min&current_weather=true&timezone=auto`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (data.current_weather && tempEl && descEl) {
+                const t = Math.round(data.current_weather.temperature);
+                tempEl.textContent = `${t}°C`;
+                descEl.textContent = codeToDescription(data.current_weather.weathercode);
+            }
+
+            if (feelsEl && data.current_weather) {
+                feelsEl.textContent = `${Math.round(data.current_weather.temperature)}°C`;
+            }
+            if (windEl && data.current_weather) {
+                windEl.textContent = `${Math.round(data.current_weather.windspeed)} km/h`;
+            }
+            if (humEl && data.hourly && data.hourly.relativehumidity_2m && data.hourly.time) {
+                const idx = data.hourly.time.indexOf(data.current_weather.time);
+                const h = idx >= 0 ? data.hourly.relativehumidity_2m[idx] : data.hourly.relativehumidity_2m[0];
+                humEl.textContent = `${Math.round(h)} %`;
+            }
+            if (updatedEl && data.current_weather) {
+                const dt = new Date(data.current_weather.time);
+                updatedEl.textContent = dt.toLocaleString("hr-HR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                });
+            }
+
+            if (forecastEl && data.daily) {
+                forecastEl.innerHTML = "";
+                for (let i = 0; i < 3; i++) {
+                    const dt = new Date(data.daily.time[i]);
+                    const dayLabel = dt.toLocaleDateString("hr-HR", { weekday: "short" });
+                    const max = Math.round(data.daily.temperature_2m_max[i]);
+                    const min = Math.round(data.daily.temperature_2m_min[i]);
+                    const code = data.daily.weathercode[i];
+
+                    const row = document.createElement("div");
+                    row.className = "forecast-day";
+                    row.innerHTML = `
+                        <span>${dayLabel}</span>
+                        <span>${min}–${max}°C</span>
+                        <span>${codeToIcon(code)} ${codeToDescription(code)}</span>
+                    `;
+                    forecastEl.appendChild(row);
+                }
+            }
+        } catch (e) {
+            console.error("Weather load failed", e);
+        }
+    }
+
+    if (btnRefresh) {
+        btnRefresh.addEventListener("click", () => {
+            fetchWeather().then(() => showToast("Vrijeme osvježeno."));
+        });
+    }
+
+    fetchWeather();
+}
+
+function codeToIcon(code) {
+    if (code === 0) return "☀️";
+    if ([1,2,3].includes(code)) return "⛅";
+    if ([45,48].includes(code)) return "🌫️";
+    if ([51,53,55,61,63,65,80,81,82].includes(code)) return "🌧️";
+    if ([71,73,75,77,85,86].includes(code)) return "❄️";
+    if ([95,96,99].includes(code)) return "⛈️";
+    return "☁️";
+}
+
+function codeToDescription(code) {
+    const map = {
+        0: "Vedro",
+        1: "Pretežno vedro",
+        2: "Djelomično oblačno",
+        3: "Oblačno",
+        45: "Magla",
+        48: "Iznad prizemne magle",
+        51: "Slaba rosulja",
+        53: "Umjerena rosulja",
+        55: "Intenzivna rosulja",
+        61: "Slaba kiša",
+        63: "Umjerena kiša",
+        65: "Jaka kiša",
+        71: "Slab snijeg",
+        73: "Umjeren snijeg",
+        75: "Jak snijeg",
+        80: "Pljuskovi kiše",
+        81: "Umjereni pljuskovi",
+        82: "Jaki pljuskovi",
+        95: "Grmljavina",
+        96: "Grmljavina s tučom",
+        99: "Jaka grmljavina s tučom"
+    };
+    return map[code] || "Promjenjivo";
+}
 
 function initSettingsModal() {
-    const btnSettings = document.getElementById("settingsButton");
-    const modal = document.getElementById("settingsModal");
-    const pinInput = document.getElementById("pinInput");
-    const pinError = document.getElementById("pinError");
-    const btnOk = document.getElementById("btnPinOk");
-    const btnCancel = document.getElementById("btnPinCancel");
-    const settingsContent = document.getElementById("settingsContent");
-    const btnClearData = document.getElementById("btnClearData");
+    const openBtn = document.querySelector("[data-open-settings]");
+    const backdrop = document.querySelector("[data-settings-backdrop]");
+    const pinInput = document.querySelector("#settings-pin");
+    const cancelBtn = document.querySelector("#settings-cancel");
+    const confirmBtn = document.querySelector("#settings-confirm");
+    const clearBtn = document.querySelector("#settings-clear");
+    const body = document.querySelector("[data-settings-body]");
 
-    if (!btnSettings || !modal) return;
+    if (!openBtn || !backdrop || !pinInput || !cancelBtn || !confirmBtn || !body) return;
 
-    function closeModal() {
-        modal.classList.add("hidden");
-        settingsContent.classList.add("hidden");
+    function open() {
+        backdrop.classList.add("modal-backdrop--visible");
+        body.classList.remove("settings-locked--visible");
         pinInput.value = "";
-        pinError.textContent = "";
+        pinInput.focus();
     }
 
-    btnSettings.addEventListener("click", () => {
-        modal.classList.remove("hidden");
-        settingsContent.classList.add("hidden");
+    function close() {
+        backdrop.classList.remove("modal-backdrop--visible");
         pinInput.value = "";
-        pinError.textContent = "";
-        pinInput.focus();
-    });
+    }
 
-    btnCancel.addEventListener("click", closeModal);
+    openBtn.addEventListener("click", open);
+    cancelBtn.addEventListener("click", close);
 
-    btnOk.addEventListener("click", () => {
+    confirmBtn.addEventListener("click", () => {
         const val = pinInput.value.trim();
-        if (val === CORRECT_PIN) {
-            pinError.textContent = "";
-            settingsContent.classList.remove("hidden");
+        if (val === "0000") {
+            body.classList.add("settings-locked--visible");
         } else {
-            pinError.textContent = "Netočan PIN. Pokušajte ponovno.";
-            settingsContent.classList.add("hidden");
+            showToast("Netočan PIN.");
+            body.classList.remove("settings-locked--visible");
         }
     });
 
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeModal();
+    backdrop.addEventListener("click", (e) => {
+        if (e.target === backdrop) {
+            close();
+        }
     });
 
-    btnClearData.addEventListener("click", () => {
-        if (!confirm("Jeste li sigurni da želite obrisati sve lokalne podatke?")) return;
-        const keysToRemove = [
-            "dora_meds",
-            "dora_sound",
-            "dora_messages",
-            "dora_reminders",
-            "dora_photos",
-            "dora_family",
-            "dora_video"
+    clearBtn?.addEventListener("click", () => {
+        if (!confirm("Stvarno obrisati sve lokalne podatke (lijekovi, poruke, fotografije)?")) return;
+        const keys = [
+            "dora-medications",
+            "dora-messages",
+            "dora-reminders",
+            "dora-photos",
+            "dora-family-messages"
         ];
-        keysToRemove.forEach(k => localStorage.removeItem(k));
-        alert("Lokalni podaci su obrisani.");
-        closeModal();
-        // osvježi početnu
-        renderMedsTable();
-        updateMedStatusText();
+        keys.forEach(k => localStorage.removeItem(k));
+        showToast("Lokalni podaci su obrisani.");
+        // refresh views
+        updateWeekGrid();
     });
 }
 
-// BOOTSTRAP
-
-document.addEventListener("DOMContentLoaded", () => {
-    startClock();
-    initSoundToggle();
+window.addEventListener("DOMContentLoaded", () => {
+    renderHeaderBasics();
+    initMedications();
+    initWeather();
     initSettingsModal();
-
-    const btnBozo = document.getElementById("btnBozo");
-    const btnKristina = document.getElementById("btnKristina");
-    if (btnBozo) btnBozo.addEventListener("click", () => setTakenFor("bozo"));
-    if (btnKristina) btnKristina.addEventListener("click", () => setTakenFor("kristina"));
-
-    renderMedsTable();
-    updateMedStatusText();
 });

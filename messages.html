@@ -1,47 +1,41 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-    <meta charset="UTF-8" />
-    <title>Poruke - Dora Asistent</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <title>Poruke - Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="app-shell">
-<header class="sub-header">
-    <a href="index.html" class="btn-back">← Natrag na početnu</a>
-    <h1>Poruke</h1>
-</header>
+<body>
+  <div class="app-shell">
+    
+<div class="subpage">
+  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
+  <div class="subpage-card">
+    <h2 class="subpage-title">Poruke</h2>
+    <p class="subpage-subtitle">Ovdje možete pripremiti velike, jasne poruke koje će se prikazivati Boži i Kristini.</p>
+    <form id="messages-form" class="stack">
+      <div>
+        <label>Poruka 1</label>
+        <textarea data-msg-index="0"></textarea>
+      </div>
+      <div>
+        <label>Poruka 2</label>
+        <textarea data-msg-index="1"></textarea>
+      </div>
+      <div>
+        <label>Poruka 3</label>
+        <textarea data-msg-index="2"></textarea>
+      </div>
+      <button class="btn-primary" type="submit">💾 Spremi poruke</button>
+    </form>
 
-<main class="app-main">
-    <section class="card">
-        <h2 class="card-title">Dnevne poruke za Božu i Kristinu</h2>
-        <p class="card-subtitle">
-            Ovdje možete upisati jednostavne poruke koje će roditelji vidjeti svaki put kada otvore ovu stranicu.
-        </p>
+    <h3 style="margin-top:18px;margin-bottom:6px;">Pregled za prikaz na ekranu</h3>
+    <div id="messages-preview"></div>
+  </div>
+</div>
 
-        <div class="form-grid">
-            <div class="form-column">
-                <label for="msgBozo">Poruka za Božu</label>
-                <textarea id="msgBozo" rows="6" placeholder="Dragi Božo, danas trebaš popiti lijek ujutro i navečer..."></textarea>
-            </div>
-            <div class="form-column">
-                <label for="msgKristina">Poruka za Kristinu</label>
-                <textarea id="msgKristina" rows="6" placeholder="Draga Kristina, danas te čeka kratka šetnja i vježbe..."></textarea>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <label for="msgGeneral">Opća poruka / podsjetnik</label>
-            <textarea id="msgGeneral" rows="4" placeholder="Zajednička poruka za oboje (npr. posjeta doktora, dolazak djece...)"></textarea>
-        </div>
-
-        <div class="form-actions">
-            <button id="btnSaveMessages" class="btn btn-primary">Spremi poruke</button>
-            <span id="msgSaved" class="save-indicator"></span>
-        </div>
-    </section>
-</main>
-
-<script src="js/messages.js"></script>
+  </div>
+  <script type="module" src="js/messages.js"></script>
 </body>
 </html>

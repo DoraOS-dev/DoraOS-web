@@ -1,47 +1,34 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-    <meta charset="UTF-8" />
-    <title>Poruke od obitelji - Dora Asistent</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <title>Poruke od obitelji - Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="app-shell">
-<header class="sub-header">
-    <a href="index.html" class="btn-back">← Natrag na početnu</a>
-    <h1>Poruke od obitelji</h1>
-</header>
+<body>
+  <div class="app-shell">
+    
+<div class="subpage">
+  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
+  <div class="subpage-card">
+    <h2 class="subpage-title">Poruke od obitelji</h2>
+    <p class="subpage-subtitle">
+      Ovdje članovi obitelji mogu ostaviti toplu poruku koja će se prikazivati na glavnom ekranu (u idućim verzijama).
+    </p>
+    <form id="family-form" class="stack">
+      <div>
+        <label>Glavna poruka obitelji</label>
+        <textarea id="family-text" placeholder="Dragi mama i tata, volimo vas i mislimo na vas..."></textarea>
+      </div>
+      <button class="btn-primary" type="submit">💾 Spremi poruku</button>
+    </form>
+    <h3 style="margin-top:18px;margin-bottom:6px;">Kako će se prikazati</h3>
+    <div id="family-preview"></div>
+  </div>
+</div>
 
-<main class="app-main">
-    <section class="card">
-        <h2 class="card-title">Topla riječ od djece i unuka</h2>
-        <p class="card-subtitle">
-            Ovdje možete pripremiti nekoliko lijepih poruka koje će roditelje razveseliti kad god požele.
-        </p>
-
-        <div class="form-grid">
-            <div class="form-column">
-                <label for="famShort">Kratka poruka (velikim slovima)</label>
-                <textarea id="famShort" rows="3" placeholder="VOLIMO VAS JAKO PUNO!"></textarea>
-            </div>
-            <div class="form-column">
-                <label for="famLong">Dulja poruka</label>
-                <textarea id="famLong" rows="6" placeholder="Dragi mama i tata, hvala vam na svemu..."></textarea>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <label for="famNote">Posebna obavijest (npr. dolazak u posjet)</label>
-            <textarea id="famNote" rows="3" placeholder="Dolazimo u posjet sljedeći tjedan..."></textarea>
-        </div>
-
-        <div class="form-actions">
-            <button id="btnSaveFamily" class="btn btn-primary">Spremi poruke</button>
-            <span id="familySaved" class="save-indicator"></span>
-        </div>
-    </section>
-</main>
-
-<script src="js/family.js"></script>
+  </div>
+  <script type="module" src="js/family.js"></script>
 </body>
 </html>

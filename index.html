@@ -1,212 +1,133 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-    <meta charset="UTF-8" />
-    <title>Dora Asistent</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <title>Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="app-shell">
+<body>
+  <div class="app-shell">
+    
 <header class="app-header">
-    <div class="app-header__left">
-        <div class="logo-small">
-            <!-- Mjesto za logo: zamijenite src sa svojim logotipom ako želite -->
-            <img src="assets/dora-logo.png" alt="Dora Asistent logo" onerror="this.style.display='none';" />
-        </div>
-        <div>
-            <h1 class="app-title">Dora Asistent</h1>
-            <p class="app-subtitle">Virtualni skrbnik za Božu i Kristinu</p>
-        </div>
+  <div class="app-header_left">
+    <div class="logo-pill">
+      <img src="assets/logo.png" alt="Dora Asistent logo" />
     </div>
-
-    <div class="app-header__right">
-        <div class="sound-toggle">
-            <label class="switch">
-                <input type="checkbox" id="soundToggle" />
-                <span class="slider round"></span>
-            </label>
-            <span class="switch-label">Zvuk</span>
-        </div>
-
-        <div class="header-clock">
-            <span id="clock-date"></span>
-            <span id="clock-time"></span>
-        </div>
-
-        <button id="settingsButton" class="icon-button" aria-label="Postavke">
-            <span class="icon-gear">⚙</span>
-        </button>
+    <div class="app-title">
+      <h1>Dora Asistent</h1>
+      <span>Virtualni skrbnik za Božu i Kristinu</span>
     </div>
+  </div>
+  <div class="app-header_right">
+    <label class="toggle">
+      Zvuk
+      <input type="checkbox" id="sound-toggle" />
+    </label>
+    <div class="clock-pill">
+      <div class="clock-pill_main">
+        <span data-clock-time>--:--:--</span>
+        <span>Čet, 1. 1. 2025.</span>
+      </div>
+      <div class="clock-pill_sub" data-clock-date>Datum</div>
+    </div>
+    <button class="icon-button" type="button" aria-label="Postavke" data-open-settings>
+      ⚙️
+    </button>
+  </div>
 </header>
 
-<main class="app-main">
-    <!-- GLAVNI IZBORNIK -->
-    <section class="card main-menu">
-        <h2 class="card-title">Glavni izbornik</h2>
-        <p class="card-subtitle">Sve najvažnije funkcije na jednom mjestu.</p>
+<main>
+  <section class="section-card">
+    <div class="section-card_header">
+      <div>
+        <div class="section-title">Glavni izbornik</div>
+        <div class="section-subtitle">Sve najvažnije funkcije na jednom mjestu.</div>
+      </div>
+    </div>
+    <div class="pill-row">
+      <a href="messages.html" class="btn-pill btn-blue"><span class="icon">💬</span><span>Poruke</span></a>
+      <a href="reminders.html" class="btn-pill btn-purple"><span class="icon">⏰</span><span>Podsjetnik</span></a>
+      <a href="dora.html" class="btn-pill btn-pink"><span class="icon">📖</span><span>Dora pomoć</span></a>
+      <a href="video.html" class="btn-pill btn-teal"><span class="icon">📹</span><span>Video poziv</span></a>
+      <a href="photos.html" class="btn-pill btn-orange"><span class="icon">🖼️</span><span>Foto album</span></a>
+      <a href="family.html" class="btn-pill btn-gray"><span class="icon">👨‍👩‍👧</span><span>Poruke od obitelji</span></a>
+    </div>
+  </section>
 
-        <div class="menu-grid">
-            <a class="btn btn-pill btn-primary" href="messages.html">
-                <span class="btn-icon">💬</span>
-                <span>Poruke</span>
-            </a>
-            <a class="btn btn-pill btn-purple" href="reminders.html">
-                <span class="btn-icon">⏰</span>
-                <span>Podsjetnik</span>
-            </a>
-            <a class="btn btn-pill btn-pink" href="dora.html">
-                <span class="btn-icon">🩺</span>
-                <span>Dora pomoć</span>
-            </a>
-            <a class="btn btn-pill btn-teal" href="video.html">
-                <span class="btn-icon">📞</span>
-                <span>Video poziv</span>
-            </a>
-            <a class="btn btn-pill btn-orange" href="photos.html">
-                <span class="btn-icon">📸</span>
-                <span>Foto album</span>
-            </a>
-            <a class="btn btn-pill btn-grey" href="family.html">
-                <span class="btn-icon">👨‍👩‍👧</span>
-                <span>Poruke od obitelji</span>
-            </a>
+  <section class="section-card">
+    <div class="section-card_header">
+      <div>
+        <div class="section-title">Potvrda da je lijek uzet</div>
+        <div class="section-subtitle">Nakon što Božo ili Kristina popije lijek, pritisnite zelenu tipku ispod.</div>
+      </div>
+    </div>
+    <div class="med-grid">
+      <div class="med-actions">
+        <button class="btn-med" id="btn-med-bozo" type="button">✓ Zabilježi za Božu</button>
+        <button class="btn-med secondary" id="btn-med-kristina" type="button">✓ Zabilježi za Kristinu</button>
+      </div>
+      <div class="med-legend">
+        Za danas još nije zabilježeno da je lijek uzet. Kada zabilježite, krugovi u tablici ispod postaju zeleni.
+      </div>
+      <div class="week-grid" data-week-grid></div>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <div class="section-card_header">
+      <div>
+        <div class="section-title">Vrijeme u Vrbniku</div>
+        <div class="section-subtitle">Trenutna prognoza i sljedeća 3 dana.</div>
+      </div>
+      <button class="btn-outline" type="button" id="btn-weather-refresh">🔄 Osvježi</button>
+    </div>
+    <div class="weather-layout">
+      <div class="weather-main">
+        <div>
+          <div class="weather-temp" data-weather-temp>--°C</div>
+          <div class="weather-desc" data-weather-desc>Učitavanje...</div>
         </div>
-    </section>
-
-    <!-- POTVRDA LIJEKA -->
-    <section class="card meds-card">
-        <h2 class="card-title">Potvrda da je lijek uzet</h2>
-        <p class="card-subtitle">
-            Nakon što Božo ili Kristina popiju lijek, pritisnite zelenu tipku ispod.
-        </p>
-
-        <div class="meds-buttons">
-            <button id="btnBozo" class="btn btn-large btn-success">
-                ✓ Zabilježi za Božu
-            </button>
-            <button id="btnKristina" class="btn btn-large btn-success">
-                ✓ Zabilježi za Kristinu
-            </button>
+        <div class="weather-meta">
+          <div><span>Osjećaj:</span> <strong data-weather-feels>--°C</strong></div>
+          <div><span>Vjetar:</span> <strong data-weather-wind>-- km/h</strong></div>
+          <div><span>Vlaga:</span> <strong data-weather-humidity>-- %</strong></div>
+          <div style="margin-top:6px;font-size:11px;">Ažurirano: <span data-weather-updated>--</span></div>
         </div>
+      </div>
+      <div class="weather-side">
+        <div class="section-subtitle">Sljedeća 3 dana</div>
+        <div class="forecast-row" data-weather-forecast></div>
+      </div>
+    </div>
+  </section>
 
-        <p id="medStatusText" class="med-status-text"></p>
-
-        <div class="weekly-overview">
-            <h3>Tjedni pregled lijekova</h3>
-            <p class="weekly-note">
-                Zeleno znači da je lijek zabilježen kao popijen, sivo znači da nije zabilježeno.
-            </p>
-
-            <table class="meds-table">
-                <thead>
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th>Pon</th>
-                        <th>Uto</th>
-                        <th>Sri</th>
-                        <th>Čet</th>
-                        <th>Pet</th>
-                        <th>Sub</th>
-                        <th>Ned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="rowBozo">
-                        <th>Božo</th>
-                    </tr>
-                    <tr id="rowKristina">
-                        <th>Kristina</th>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="legend">
-                <span class="dot dot-taken"></span> Lijek uzet
-                <span class="dot dot-missing"></span> Nije zabilježeno
-                <span class="dot dot-empty"></span> Nema podataka
-                <span class="legend-today">● Danas</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- VRIJEME -->
-    <section class="card weather-card">
-        <div class="weather-header">
-            <div>
-                <h2 class="card-title">Vrijeme u Vrbniku</h2>
-                <p class="card-subtitle">
-                    Trenutna prognoza i sljedeća 3 dana.
-                </p>
-            </div>
-            <a href="weather.html" class="btn btn-outline">
-                🔍 Pogledaj detaljnu prognozu
-            </a>
-        </div>
-
-        <div id="weatherNow" class="weather-now">
-            <div class="weather-temp" id="weather-temp">--°C</div>
-            <div class="weather-desc">
-                <div id="weather-desc">Učitavanje...</div>
-                <div class="weather-meta">
-                    <span>Osjećaj: <span id="weather-feels">--°C</span></span>
-                    <span>Vjetar: <span id="weather-wind">-- km/h</span></span>
-                    <span>Vlaga: <span id="weather-humidity">-- %</span></span>
-                </div>
-                <div class="weather-updated">
-                    Ažurirano: <span id="weather-updated">--</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="weatherNext" class="weather-next">
-            <!-- prognoza 3 dana ide ovdje -->
-        </div>
-
-        <p class="weather-note">
-            Podaci se preuzimaju s Open-Meteo servisa na temelju geolokacije Vrbnika.
-            Vrijednosti su informativne i mogu odstupati od lokalnih mjerenja.
-        </p>
-    </section>
-
-    <section class="card info-card">
-        <p>
-            Podaci o lijekovima i fotografije čuvaju se samo lokalno na ovom uređaju
-            (u <strong>localStorage</strong>) i ne šalju se na internet.
-        </p>
-    </section>
+  <div class="footer-text">
+    Podaci o lijekovima i fotografije čuvaju se samo lokalno na ovom uređaju (u localStorage).
+  </div>
 </main>
 
-<!-- POSTAVKE MODAL (PIN) -->
-<div id="settingsModal" class="modal-backdrop hidden" aria-hidden="true">
-    <div class="modal">
-        <h2>Postavke</h2>
-        <p>Unesite PIN za pristup postavkama.</p>
-
-        <div class="pin-input-row">
-            <input type="password" id="pinInput" maxlength="4" inputmode="numeric" autocomplete="off" />
-        </div>
-        <p id="pinError" class="pin-error"></p>
-
-        <div class="modal-actions">
-            <button id="btnPinCancel" class="btn btn-secondary">Odustani</button>
-            <button id="btnPinOk" class="btn btn-pink">Potvrdi</button>
-        </div>
-
-        <div id="settingsContent" class="settings-content hidden">
-            <h3>Osnovne postavke</h3>
-            <p>Ovdje možete upravljati lokalnim podacima na uređaju.</p>
-            <button id="btnClearData" class="btn btn-danger">
-                Obriši sve lokalne podatke (lijekovi, poruke, fotografije)
-            </button>
-            <p class="small-note">
-                Ova akcija ne može se poništiti. Koristite samo ako želite resetirati
-                sustav na početno stanje.
-            </p>
-        </div>
+<div class="modal-backdrop" data-settings-backdrop>
+  <div class="modal">
+    <h2>Postavke</h2>
+    <p>Unesite PIN za pristup postavkama.</p>
+    <input id="settings-pin" class="pin-input" maxlength="4" type="password" inputmode="numeric" autocomplete="off" />
+    <div class="modal-actions">
+      <button type="button" class="btn-ghost" id="settings-cancel">Odustani</button>
+      <button type="button" class="btn-primary" id="settings-confirm">Potvrdi</button>
     </div>
+    <div class="settings-body settings-locked" data-settings-body>
+      <h3>Osnovne postavke</h3>
+      <p>Ovdje možete upravljati lokalnim podacima na uređaju.</p>
+      <button type="button" class="btn-danger" id="settings-clear">
+        Obriši sve lokalne podatke (lijekovi, poruke, fotografije)
+      </button>
+      <p style="margin-top:6px;">Ova akcija se ne može poništiti. Koristite samo ako želite resetirati sustav na početno stanje.</p>
+    </div>
+  </div>
 </div>
 
-<script src="js/main.js"></script>
-<script src="js/weather.js"></script>
+  </div>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
