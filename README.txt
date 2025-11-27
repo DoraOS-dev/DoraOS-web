@@ -1,1 +1,1 @@
-DoraOS V6.6 – Prošireni (B-verzija) – statička web verzija za GitHub Pages.
+DoraOS V6.7.2 – puni web build za GitHub Pages.

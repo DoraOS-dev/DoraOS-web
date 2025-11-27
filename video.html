@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Video poziv - Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Video poziv – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/video.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Video poziv</h1>
     
-<div class="subpage">
-  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
-  <div class="subpage-card">
-    <h2 class="subpage-title">Video poziv</h2>
-    <p class="subpage-subtitle">
-      U ovoj verziji ne radimo pravi video-poziv, ali ovdje možete objasniti roditeljima kako jednostavno
-      pokrenuti poziv.
-    </p>
-    <div id="video-info" class="section-subtitle" style="line-height:1.5;"></div>
-  </div>
-</div>
-
-  </div>
-  <script type="module" src="js/video.js"></script>
+    <p>Za sada Dora ne pokreće video poziv direktno, ali ovdje možete zapisati što treba napraviti.</p>
+    <p class="section-subtitle">Primjer: "Otvori WhatsApp i nazovi Patriciju".</p>
+    <label for="video-notes">Upute za video poziv</label>
+    <textarea id="video-notes" rows="4"></textarea>
+    <button class="btn-primary" id="save-video-notes">Spremi upute</button>
+    
+  </section>
+</main>
 </body>
 </html>

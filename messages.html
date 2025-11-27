@@ -1,41 +1,35 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Poruke - Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Poruke – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/messages.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Poruke</h1>
     
-<div class="subpage">
-  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
-  <div class="subpage-card">
-    <h2 class="subpage-title">Poruke</h2>
-    <p class="subpage-subtitle">Ovdje možete pripremiti velike, jasne poruke koje će se prikazivati Boži i Kristini.</p>
-    <form id="messages-form" class="stack">
+    <p>Ovdje možete pripremiti kratke poruke koje će se prikazivati Boži i Kristini.</p>
+    <div class="form-grid">
       <div>
-        <label>Poruka 1</label>
-        <textarea data-msg-index="0"></textarea>
+        <label for="msg-bozo">Poruka za Božu</label>
+        <textarea id="msg-bozo" rows="3"></textarea>
       </div>
       <div>
-        <label>Poruka 2</label>
-        <textarea data-msg-index="1"></textarea>
+        <label for="msg-kristina">Poruka za Kristinu</label>
+        <textarea id="msg-kristina" rows="3"></textarea>
       </div>
-      <div>
-        <label>Poruka 3</label>
-        <textarea data-msg-index="2"></textarea>
-      </div>
-      <button class="btn-primary" type="submit">💾 Spremi poruke</button>
-    </form>
-
-    <h3 style="margin-top:18px;margin-bottom:6px;">Pregled za prikaz na ekranu</h3>
-    <div id="messages-preview"></div>
-  </div>
-</div>
-
-  </div>
-  <script type="module" src="js/messages.js"></script>
+    </div>
+    <button class="btn-primary" id="save-messages">Spremi poruke</button>
+    <p class="section-subtitle small">Poruke se čuvaju lokalno na ovom uređaju.</p>
+    
+  </section>
+</main>
 </body>
 </html>

@@ -1,42 +1,35 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Podsjetnik - Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Podsjetnik – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/reminders.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Podsjetnik za lijekove</h1>
     
-<div class="subpage">
-  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
-  <div class="subpage-card">
-    <h2 class="subpage-title">Podsjetnik</h2>
-    <p class="subpage-subtitle">Postavite vrijeme kada obično piju lijekove. Dora će to koristiti kao orijentaciju.</p>
-    <form id="reminders-form" class="stack">
-      <div class="form-row">
-        <div>
-          <label>Jutarnji lijek</label>
-          <input type="time" id="rem-morning" />
-        </div>
-        <div>
-          <label>Večernji lijek</label>
-          <input type="time" id="rem-evening" />
-        </div>
+    <p>Postavite vrijeme podsjetnika za jutarnji i večernji lijek.</p>
+    <div class="form-grid">
+      <div>
+        <label for="reminder-morning">Jutarnji lijek</label>
+        <input type="time" id="reminder-morning">
       </div>
       <div>
-        <label>Posebne napomene (npr. "nakon doručka")</label>
-        <textarea id="rem-note"></textarea>
+        <label for="reminder-evening">Večernji lijek</label>
+        <input type="time" id="reminder-evening">
       </div>
-      <button class="btn-primary" type="submit">💾 Spremi podsjetnik</button>
-    </form>
-    <h3 style="margin-top:18px;margin-bottom:6px;">Sažetak za danas</h3>
-    <div id="reminders-summary" class="section-subtitle"></div>
-  </div>
-</div>
-
-  </div>
-  <script type="module" src="js/reminders.js"></script>
+    </div>
+    <button class="btn-primary" id="save-reminders">Spremi podsjetnike</button>
+    <p class="section-subtitle small">Vrijeme se čuva lokalno. Dora trenutno ne šalje alarme, ali skrbnik može provjeravati postavke.</p>
+    
+  </section>
+</main>
 </body>
 </html>

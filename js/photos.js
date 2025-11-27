@@ -1,68 +1,57 @@
-
-import { renderHeaderBasics, loadJSON, saveJSON, showToast } from "./app.js";
-
-const KEY = "dora-photos";
-
-function init() {
-    renderHeaderBasics();
-    const input = document.querySelector("#photo-input");
-    const grid = document.querySelector("#photo-grid");
-
-    let photos = loadJSON(KEY, []);
-
-    function render() {
-        grid.innerHTML = "";
-        if (!photos.length) {
-            const p = document.createElement("p");
-            p.className = "photo-empty";
-            p.textContent = "Nema spremljenih fotografija. Dodajte ih pomoću gumba gore.";
-            grid.appendChild(p);
-            return;
-        }
-        photos.forEach((src, idx) => {
-            const wrap = document.createElement("div");
-            wrap.className = "photo-item";
-            const img = document.createElement("img");
-            img.src = src;
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "photo-remove";
-            btn.textContent = "Obriši";
-            btn.addEventListener("click", () => {
-                photos.splice(idx, 1);
-                saveJSON(KEY, photos);
-                render();
-            });
-            wrap.appendChild(img);
-            wrap.appendChild(btn);
-            grid.appendChild(wrap);
-        });
-    }
-
-    input?.addEventListener("change", (e) => {
-        const files = Array.from(input.files || []);
-        if (!files.length) return;
-
-        const limit = 20;
-        if (photos.length + files.length > limit) {
-            alert(`Maksimalno ${limit} fotografija. Trenutno je spremljeno ${photos.length}.`);
-        }
-
-        files.slice(0, limit - photos.length).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                photos.push(reader.result);
-                saveJSON(KEY, photos);
-                render();
-            };
-            reader.readAsDataURL(file);
-        });
-
-        input.value = "";
-        showToast("Fotografije se spremaju na uređaj.");
+function loadPhotos() {
+  const gallery = document.getElementById("photo-gallery");
+  gallery.innerHTML = "";
+  const raw = localStorage.getItem("dora_photos");
+  if (!raw) return;
+  try {
+    const items = JSON.parse(raw);
+    items.forEach(dataUrl => {
+      const img = document.createElement("img");
+      img.src = dataUrl;
+      gallery.appendChild(img);
     });
-
-    render();
+  } catch {}
 }
 
-window.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("photo-input");
+  const btnSave = document.getElementById("save-photos");
+  const btnClear = document.getElementById("clear-photos");
+
+  loadPhotos();
+
+  btnSave.addEventListener("click", () => {
+    const files = Array.from(input.files || []);
+    if (!files.length) return;
+
+    const raw = localStorage.getItem("dora_photos");
+    let items = [];
+    if (raw) {
+      try {
+        items = JSON.parse(raw);
+      } catch {}
+    }
+
+    let remaining = files.length;
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        items.push(e.target.result);
+        remaining -= 1;
+        if (remaining === 0) {
+          localStorage.setItem("dora_photos", JSON.stringify(items));
+          loadPhotos();
+          input.value = "";
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  btnClear.addEventListener("click", () => {
+    if (confirm("Obrisati sve lokalne fotografije?")) {
+      localStorage.removeItem("dora_photos");
+      loadPhotos();
+    }
+  });
+});

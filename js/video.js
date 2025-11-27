@@ -1,16 +1,13 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const textarea = document.getElementById("video-notes");
+  const btn = document.getElementById("save-video-notes");
 
-import { renderHeaderBasics } from "./app.js";
+  const raw = localStorage.getItem("dora_video_notes");
+  if (raw) textarea.value = raw;
 
-function init() {
-    renderHeaderBasics();
-    const info = document.querySelector("#video-info");
-    if (!info) return;
-    info.innerHTML = `
-        Ovdje možete upisati upute kako pokrenuti video poziv (npr. WhatsApp, Viber, Messenger)
-        ili dodati poveznice na omiljene kontakte.<br/><br/>
-        U ovoj verziji aplikacije ne radimo pravi video‑poziv, nego samo pomažemo da osoba
-        jednostavno pronađe upute od obitelji.
-    `;
-}
-
-window.addEventListener("DOMContentLoaded", init);
+  btn.addEventListener("click", () => {
+    localStorage.setItem("dora_video_notes", textarea.value);
+    btn.textContent = "Spremljeno ✔";
+    setTimeout(() => (btn.textContent = "Spremi upute"), 1500);
+  });
+});

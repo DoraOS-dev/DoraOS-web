@@ -1,34 +1,27 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Poruke od obitelji - Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Poruke od obitelji – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/family.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Poruke od obitelji</h1>
     
-<div class="subpage">
-  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
-  <div class="subpage-card">
-    <h2 class="subpage-title">Poruke od obitelji</h2>
-    <p class="subpage-subtitle">
-      Ovdje članovi obitelji mogu ostaviti toplu poruku koja će se prikazivati na glavnom ekranu (u idućim verzijama).
-    </p>
-    <form id="family-form" class="stack">
-      <div>
-        <label>Glavna poruka obitelji</label>
-        <textarea id="family-text" placeholder="Dragi mama i tata, volimo vas i mislimo na vas..."></textarea>
-      </div>
-      <button class="btn-primary" type="submit">💾 Spremi poruku</button>
-    </form>
-    <h3 style="margin-top:18px;margin-bottom:6px;">Kako će se prikazati</h3>
-    <div id="family-preview"></div>
-  </div>
-</div>
-
-  </div>
-  <script type="module" src="js/family.js"></script>
+    <p>Ovdje članovi obitelji mogu ostaviti posebne poruke podrške.</p>
+    <label for="family-messages">Poruke</label>
+    <textarea id="family-messages" rows="5"></textarea>
+    <button class="btn-primary" id="save-family-messages">Spremi poruke</button>
+    <p class="section-subtitle small">Poruke se čuvaju samo lokalno.</p>
+    
+  </section>
+</main>
 </body>
 </html>

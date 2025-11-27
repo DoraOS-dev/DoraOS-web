@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dora pomoć (AI)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Dora pomoć – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/ai.js" defer></script>
 </head>
-<body class="app">
-  <div class="app-shell">
-    <header class="app-header app-header--compact">
-      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
-      <h1 class="app-title">Dora pomoć</h1>
-    </header>
-    <main class="app-main app-main--narrow">
-      <section class="card">
-        <p>
-          Ovdje će kasnije biti poveznica na pametnu Dora pomoć (AI) koja može
-          odgovarati na pitanja, podsjećati na lijekove i pojašnjavati upute liječnika.
-        </p>
-        <p>Za sada je ovo samo informativna stranica.</p>
-      </section>
-    </main>
-  </div>
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Dora pomoć</h1>
+    
+    <p>Ovdje možete zapisati kratke upute što Dora treba raditi tijekom dana ili pitanja za AI asistenta.</p>
+    <textarea id="ai-notes" rows="6"></textarea>
+    <button class="btn-primary" id="save-ai-notes">Spremi bilješke</button>
+    <p class="section-subtitle small">U budućnosti se ovdje može dodati poveznica na pravog AI asistenta.</p>
+    
+  </section>
+</main>
 </body>
 </html>

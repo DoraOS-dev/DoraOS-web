@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Foto album - Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Foto album – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/photos.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Foto album</h1>
     
-<div class="subpage">
-  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
-  <div class="subpage-card">
-    <h2 class="subpage-title">Foto album</h2>
-    <p class="subpage-subtitle">
-      Dodajte par dragih fotografija (obitelj, kuća, more...). Sve se sprema samo na ovaj uređaj i ne ide na internet.
-    </p>
-    <div class="stack">
-      <div>
-        <label>Dodaj fotografije</label>
-        <input type="file" id="photo-input" accept="image/*" multiple />
-      </div>
-      <div id="photo-grid" class="photo-grid"></div>
-    </div>
-  </div>
-</div>
-
-  </div>
-  <script type="module" src="js/photos.js"></script>
+    <p>Dodajte nekoliko obiteljskih fotografija koje će Božo i Kristina moći gledati.</p>
+    <input type="file" id="photo-input" accept="image/*" multiple>
+    <button class="btn-primary" id="save-photos">Dodaj fotografije</button>
+    <button class="btn-secondary" id="clear-photos">Obriši sve fotografije</button>
+    <div id="photo-gallery" class="photo-grid"></div>
+    <p class="section-subtitle small">Fotografije se čuvaju samo lokalno na ovom uređaju.</p>
+    
+  </section>
+</main>
 </body>
 </html>

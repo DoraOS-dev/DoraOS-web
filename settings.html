@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Postavke - Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8">
+  <title>Postavke – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/settings.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
+<body class="app-shell">
+<header class="sub-header">
+  <button class="back-button" onclick="window.location.href='index.html'">← Natrag na početnu</button>
+</header>
+<main class="layout-main">
+  <section class="card">
+    <h1 class="section-title">Postavke</h1>
     
-<div class="subpage">
-  <div class="back-row"><a href="index.html" class="btn-back">← Natrag na početnu</a></div>
-  <div class="subpage-card">
-    <h2 class="subpage-title">Postavke</h2>
-    <p class="subpage-subtitle">
-      Većina postavki se podešava kroz kotačić na glavnoj stranici. Ova stranica je samo informativna.
+    <p>Osnovne postavke Dora Asistenta na ovom uređaju.</p>
+    <button class="btn-danger" id="clear-local-data">
+      Obriši sve lokalne podatke (lijekovi, poruke, fotografije)
+    </button>
+    <p class="section-subtitle small">
+      Ova akcija se ne može poništiti. Koristite samo ako želite resetirati sustav na početno stanje.
     </p>
-    <p>PIN za pristup postavkama: 0000 (možete ga kasnije promijeniti u kodu / uz pomoć developera).</p>
-  </div>
-</div>
-
-  </div>
-  <script type="module" src="js/settings.js"></script>
+    
+  </section>
+</main>
 </body>
 </html>
