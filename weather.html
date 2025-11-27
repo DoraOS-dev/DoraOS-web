@@ -5,46 +5,29 @@
   <title>Vrijeme u Vrbniku – Dora Asistent</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="js/weather.js"></script>
 </head>
-<body class="app">
-  <div class="app-shell">
-    <header class="app-header app-header--compact">
-      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
-      <h1 class="app-title">Vrijeme u Vrbniku</h1>
-    </header>
+<body>
+  <div class="page-shell">
+    <button class="nav-button nav-button--outline" onclick="window.location.href='index.html'">
+      ← Natrag
+    </button>
 
-    <main class="app-main app-main--narrow">
-      <section class="card" id="weatherCurrent">
-        <h2>Trenutna prognoza</h2>
-        <div class="weather-main">
-          <div>
-            <div id="weatherTemp" class="weather-temp">--°C</div>
-            <div id="weatherDesc" class="weather-desc">Učitavanje...</div>
-          </div>
-          <dl class="weather-details">
-            <div><dt>Osjećaj</dt><dd id="weatherFeels">--°C</dd></div>
-            <div><dt>Vjetar</dt><dd id="weatherWind">-- km/h</dd></div>
-            <div><dt>Vlaga</dt><dd id="weatherHumidity">-- %</dd></div>
-          </dl>
-        </div>
-        <p class="weather-updated">Ažurirano: <span id="weatherUpdated">--</span></p>
-      </section>
+    <section class="card card--primary" style="margin-top:14px;">
+      <h1 class="card-title">Vrijeme u Vrbniku</h1>
+      <p class="card-subtitle">Trenutna prognoza i sljedeća 3 dana</p>
 
-      <section class="card">
-        <div class="card-header-row">
-          <h2>Sljedeća 3 dana</h2>
-          <button class="secondary-btn" id="weatherRefresh">Osvježi</button>
-        </div>
-        <div id="weatherForecast" class="forecast-grid"></div>
-      </section>
+      <div id="weather-current" class="weather-current">
+        Učitavanje podataka o vremenu...
+      </div>
 
-      <p class="weather-note">
+      <div id="weather-forecast" class="weather-forecast"></div>
+
+      <p class="storage-note" style="margin-top:12px;">
         Podaci se preuzimaju s Open-Meteo servisa na temelju geolokacije Vrbnika.
         Vrijednosti su informativne i mogu odstupati od lokalnih mjerenja.
       </p>
-    </main>
+    </section>
   </div>
-
-  <script src="js/weather.js"></script>
 </body>
 </html>

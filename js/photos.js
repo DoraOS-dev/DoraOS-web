@@ -1,88 +1,71 @@
-// Dora Asistent – lokalni foto album (localStorage)
-
-const PHOTOS_KEY = "dora_photos_v1";
+// Jednostavan lokalni foto-album
+const INPUT = document.getElementById("photoInput");
+const GRID = document.getElementById("photoGrid");
+const CLEAR = document.getElementById("clearPhotos");
+const KEY = "doraPhotos";
 
 function loadPhotos() {
   try {
-    const raw = localStorage.getItem(PHOTOS_KEY);
+    const raw = localStorage.getItem(KEY);
     if (!raw) return [];
     return JSON.parse(raw);
-  } catch (e) {
-    console.warn("Ne mogu učitati fotografije", e);
+  } catch {
     return [];
   }
 }
 
 function savePhotos(list) {
-  localStorage.setItem(PHOTOS_KEY, JSON.stringify(list));
+  localStorage.setItem(KEY, JSON.stringify(list));
 }
 
 function renderPhotos() {
-  const grid = document.getElementById("photoGrid");
-  if (!grid) return;
-  const photos = loadPhotos();
-  grid.innerHTML = "";
-  if (!photos.length) {
-    grid.innerHTML = '<p style="color:#9ca3af;font-size:0.9rem;">Još nema spremljenih fotografija.</p>';
+  const list = loadPhotos();
+  GRID.innerHTML = "";
+  if (!list.length) {
+    GRID.innerHTML =
+      '<p style="font-size:0.9rem;color:var(--text-soft);margin:4px 0;">Još nema spremljenih fotografija.</p>';
     return;
   }
-  photos.forEach((src, index) => {
+
+  const frag = document.createDocumentFragment();
+  list.forEach((dataUrl, index) => {
     const wrapper = document.createElement("div");
-    wrapper.className = "photo-item";
+    wrapper.className = "photo-thumb";
     const img = document.createElement("img");
-    img.src = src;
-    img.alt = `Fotografija ${index + 1}`;
-    const del = document.createElement("button");
-    del.textContent = "✕";
-    del.addEventListener("click", () => {
-      const arr = loadPhotos();
-      arr.splice(index, 1);
-      savePhotos(arr);
-      renderPhotos();
-    });
+    img.src = dataUrl;
+    img.alt = "Fotografija " + (index + 1);
     wrapper.appendChild(img);
-    wrapper.appendChild(del);
-    grid.appendChild(wrapper);
+    frag.appendChild(wrapper);
   });
+  GRID.appendChild(frag);
 }
 
-function handleFiles(files) {
-  if (!files || !files.length) return;
+INPUT.addEventListener("change", () => {
+  const files = Array.from(INPUT.files || []);
+  if (!files.length) return;
   const existing = loadPhotos();
-  const readers = [];
-  Array.from(files).forEach((file) => {
+
+  let pending = files.length;
+  files.forEach((file) => {
     const reader = new FileReader();
-    readers.push(
-      new Promise((resolve) => {
-        reader.onload = (e) => resolve(e.target.result);
-        reader.readAsDataURL(file);
-      })
-    );
-  });
-
-  Promise.all(readers).then((results) => {
-    const next = existing.concat(results);
-    savePhotos(next);
-    renderPhotos();
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const input = document.getElementById("photoInput");
-  const clearBtn = document.getElementById("clearPhotos");
-  if (input) {
-    input.addEventListener("change", () => {
-      handleFiles(input.files);
-      input.value = "";
-    });
-  }
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      if (confirm("Obrisati sve fotografije iz albuma?")) {
-        savePhotos([]);
+    reader.onload = (e) => {
+      existing.push(e.target.result);
+      pending -= 1;
+      if (pending === 0) {
+        savePhotos(existing);
         renderPhotos();
+        INPUT.value = "";
       }
-    });
-  }
-  renderPhotos();
+    };
+    reader.readAsDataURL(file);
+  });
 });
+
+CLEAR.addEventListener("click", () => {
+  if (confirm("Sigurno obrisati sve spremljene fotografije?")) {
+    localStorage.removeItem(KEY);
+    renderPhotos();
+  }
+});
+
+renderPhotos();

@@ -5,31 +5,37 @@
   <title>Foto album – Dora Asistent</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
+  <script defer src="js/photos.js"></script>
 </head>
-<body class="app">
-  <div class="app-shell">
-    <header class="app-header app-header--compact">
-      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
-      <h1 class="app-title">Foto album</h1>
-    </header>
+<body>
+  <div class="page-shell">
+    <button class="nav-button nav-button--outline" onclick="window.location.href='index.html'">
+      ← Natrag
+    </button>
 
-    <main class="app-main app-main--narrow">
-      <section class="card">
-        <p>Dodajte nekoliko dragih fotografija koje će Božo i Kristina moći gledati.</p>
-        <label class="primary-btn primary-btn--file">
+    <section class="card card--primary" style="margin-top:14px;">
+      <h1 class="card-title">Foto album</h1>
+      <p class="card-subtitle">
+        Dodajte omiljene slike obitelji. Sve se sprema samo na ovaj uređaj (localStorage).
+      </p>
+
+      <div style="margin:10px 0 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+        <label class="nav-button nav-button--orange" style="cursor:pointer;">
           📸 Dodaj fotografije
-          <input type="file" id="photoInput" accept="image/*" multiple hidden />
+          <input id="photoInput" type="file" accept="image/*" multiple style="display:none;" />
         </label>
-      </section>
+        <button id="clearPhotos" class="nav-button nav-button--outline">
+          🗑 Obriši sve slike
+        </button>
+      </div>
 
-      <section class="card">
-        <h2>Album</h2>
-        <div id="photoGrid" class="photo-grid"></div>
-        <button class="secondary-btn" id="clearPhotos">Obriši sve fotografije</button>
-      </section>
-    </main>
+      <div id="photoGrid" class="photo-grid"></div>
+
+      <p class="storage-note" style="margin-top:12px;">
+        Napomena: slike se ne šalju na internet – čuvaju se samo lokalno u pregledniku
+        (localStorage). Ako izbrišete podatke preglednika, slike će nestati.
+      </p>
+    </section>
   </div>
-
-  <script src="js/photos.js"></script>
 </body>
 </html>
