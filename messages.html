@@ -3,28 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <title>Poruke – Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="">
   <div class="app-shell">
-    <div class="app-content">
-      <header class="page-header">
-        <div>
-          <a href="index.html" class="back-link">← Natrag na početni ekran</a>
-          <h1>Poruke</h1>
-          <p class="text-muted">Jednostavne poruke koje im možeš pripremiti unaprijed.</p>
+    <header class="app-header">
+      <div class="app-header__top">
+        <div class="brand">
+          <div class="brand__title">Dora Asistent</div>
+          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
         </div>
-      </header>
-      <section class="list-card">
-        <div class="section-label">Primjer poruka</div>
-        <ul class="simple-list">
-          <li>„Dragi mama i tata, danas dolazim popodne oko 17h. ❤️“</li>
-          <li>„Ako trebaš pomoć, nazovi Darka na gumb Video poziv.“</li>
-          <li>„Lijekovi su pripremljeni pored kuhinjskog sudopera.“</li>
-        </ul>
-      </section>
+        <div class="device-status">
+          <span></span>
+          Uređaj spreman za korištenje
+        </div>
+      </div>
+      <div class="app-header__meta">
+        <div class="meta-line">
+          <strong>Danas:</strong>
+          <span id="meta-date"></span>
+        </div>
+        <div class="meta-line">
+          <strong>Na uređaju:</strong>
+          <span id="meta-time"></span>
+        </div>
+      </div>
+    </header>
+
+  <main class="app-main">
+    <div class="weather-header">
+      <a href="index.html" class="back-link">⟵ Natrag</a>
+      <div>
+        <div class="page-title">Poruke</div>
+        <div class="page-subtitle">Jednostavne poruke za Božu i Kristinu</div>
+      </div>
     </div>
+    <section>
+      <div class="panel-soft">
+        <p><strong>Ova stranica će kasnije dobiti punu funkcionalnost.</strong></p>
+        <p>Za sada je ovo samo statična stranica. Kasnije će ovdje biti jednostavni pregledi poruka koje pripremiš ti ili obitelj.</p>
+      </div>
+    </section>
+  </main>
+
   </div>
   <script src="js/main.js"></script>
 </body>

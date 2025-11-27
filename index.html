@@ -2,80 +2,76 @@
 <html lang="hr">
 <head>
   <meta charset="UTF-8" />
-  <title>Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dora Asistent – Glavni izbornik</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="">
   <div class="app-shell">
-    <div class="app-content">
-      <header class="app-header">
-        <div class="app-header__title">
-          <div class="app-logo-row">
-            <div class="app-logo-dot"><span></span></div>
-            <h1>Dora Asistent</h1>
-          </div>
-          <p class="app-header__subtitle">
-            Virtualni skrbnik za Božu i Kristinu – veliki gumbi, jasne poruke i podsjetnici.
-          </p>
-          <div class="app-header__meta">
-            <span class="app-tag">
-              <span class="app-tag-dot"></span>
-              <span>Na uređaju – bez oblaka</span>
-            </span>
-            <span class="app-clock" data-clock></span>
-          </div>
+    <header class="app-header">
+      <div class="app-header__top">
+        <div class="brand">
+          <div class="brand__title">Dora Asistent</div>
+          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
         </div>
-      </header>
+        <div class="device-status">
+          <span></span>
+          Uređaj spreman za korištenje
+        </div>
+      </div>
+      <div class="app-header__meta">
+        <div class="meta-line">
+          <strong>Danas:</strong>
+          <span id="meta-date"></span>
+        </div>
+        <div class="meta-line">
+          <strong>Na uređaju:</strong>
+          <span id="meta-time"></span>
+        </div>
+      </div>
+    </header>
 
-      <main class="app-main-grid">
-        <section class="app-card">
-          <div class="app-card__header">
-            <div class="section-label">
-              Glavni izbornik
-            </div>
-            <span class="app-card__hint">Sve najvažnije funkcije na jednom mjestu</span>
-          </div>
-          <div class="app-main-buttons">
-            <button class="btn btn--primary" onclick="location.href='weather.html'">
-              <span>☁️ Vrijeme</span>
-            </button>
-            <button class="btn btn--ghost" onclick="location.href='reminders.html'">
-              <span>⏰ Podsjetnici</span>
-            </button>
-            <button class="btn btn--ghost" onclick="location.href='messages.html'">
-              <span>💬 Poruke</span>
-            </button>
-            <button class="btn btn--ghost" onclick="location.href='dora.html'">
-              <span>🧠 Dora pomoć</span>
-            </button>
-            <button class="btn btn--ghost" onclick="location.href='photos.html'">
-              <span>📸 Foto album</span>
-            </button>
-            <button class="btn btn--ghost" onclick="location.href='video.html'">
-              <span>📞 Video poziv</span>
-            </button>
-          </div>
-        </section>
+  <main class="app-main">
+    <section>
+      <p style="font-size:0.9rem;color:var(--text-soft);margin-top:0;">
+        Veliki gumbi, jasne poruke i podsjetnici – sve najvažnije funkcije na jednom mjestu.
+      </p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="navigate('weather.html')">
+          <span class="icon">☀️</span> Vrijeme
+        </button>
+        <button class="btn btn-soft" onclick="navigate('reminders.html')">
+          <span class="icon">⏰</span> Podsjetnici
+        </button>
+        <button class="btn btn-soft" onclick="navigate('messages.html')">
+          <span class="icon">💬</span> Poruke
+        </button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-soft" onclick="navigate('ai.html')">
+          <span class="icon">🤖</span> Dora pomoć
+        </button>
+        <button class="btn btn-soft" onclick="navigate('photos.html')">
+          <span class="icon">📸</span> Foto album
+        </button>
+        <button class="btn btn-soft" onclick="navigate('video.html')">
+          <span class="icon">📞</span> Video poziv
+        </button>
+      </div>
+    </section>
 
-        <section class="app-secondary-card">
-          <div class="app-card__header">
-            <div class="section-label">Danas</div>
-          </div>
-          <div class="text-muted" style="font-size:14px; line-height:1.5;">
-            Ova probna verzija Dora Asistenta radi potpuno lokalno u pregledniku.
-            <br /><br />
-            • <strong>Foto album</strong> sprema slike u <em>localStorage</em> ovog uređaja
-            (bez slanja na internet).<br />
-            • <strong>Vrijeme</strong> čita prognozu za Vrbnik s Open‑Meteo servisa.<br />
-            • Ostale stranice (Poruke, Podsjetnici, Dora pomoć) zasad su pojednostavljeni
-            prikaz – spremni za kasnije proširenje.
-          </div>
-        </section>
-      </main>
-    </div>
+    <section style="margin-top:18px;">
+      <div class="panel-soft">
+        <p><strong>Test verzija</strong> radi potpuno lokalno u pregledniku. Ništa se ne šalje na internet.</p>
+        <p style="font-size:0.8rem;">
+          Kada Dora Asistent bude gotov, sve će raditi automatski i bez dodatnih klikova – samo veliki, jasni gumbi
+          za vaše roditelje.
+        </p>
+      </div>
+    </section>
+  </main>
+
   </div>
-
   <script src="js/main.js"></script>
 </body>
 </html>

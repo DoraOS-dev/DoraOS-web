@@ -1,156 +1,93 @@
-const PHOTOS_KEY = 'dora_photos_v1';
+const PHOTO_KEY = "dora_photos_v1";
 
 function loadPhotos() {
   try {
-    const raw = localStorage.getItem(PHOTOS_KEY);
+    const raw = localStorage.getItem(PHOTO_KEY);
     if (!raw) return [];
-    const arr = JSON.parse(raw);
-    if (!Array.isArray(arr)) return [];
-    return arr;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 }
 
 function savePhotos(list) {
-  localStorage.setItem(PHOTOS_KEY, JSON.stringify(list));
+  try {
+    localStorage.setItem(PHOTO_KEY, JSON.stringify(list));
+  } catch {
+    // ignore
+  }
 }
 
 function renderPhotos() {
-  const grid = document.querySelector('[data-gallery-grid]');
-  const counter = document.querySelector('[data-photo-count]');
+  const grid = document.getElementById("photo-grid");
   if (!grid) return;
-
   const photos = loadPhotos();
-  grid.innerHTML = '';
 
-  if (counter) counter.textContent = photos.length.toString();
-
-  if (!photos.length) {
-    const empty = document.createElement('div');
-    empty.className = 'gallery-empty';
-    empty.textContent = 'Još nema spremljenih fotografija. Dodajte prve slike za mamu i tatu ❤️';
+  grid.innerHTML = "";
+  if (photos.length === 0) {
+    const empty = document.createElement("p");
+    empty.style.marginTop = "14px";
+    empty.style.color = "var(--text-soft)";
+    empty.style.fontSize = "0.86rem";
+    empty.textContent = "Još nema spremljenih fotografija. Dodaj prvu sliku gumbom iznad.";
     grid.appendChild(empty);
     return;
   }
 
-  photos.forEach((p, index) => {
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `
-      <img src="${p.data}" alt="${p.label || 'Fotografija'}" loading="lazy" />
-      <div class="gallery-meta">
-        <span class="gallery-badge">${p.label || 'Bez opisa'}</span>
-        <button class="gallery-delete" data-index="${index}">Obriši</button>
+  for (const p of photos) {
+    const tile = document.createElement("div");
+    tile.className = "photo-tile";
+    tile.innerHTML = `
+      <img src="${p.data}" alt="Porodična fotografija" />
+      <div class="photo-tile__meta">
+        <div>${p.label || "Fotografija"}</div>
+        <div style="opacity:0.7;">${p.date || ""}</div>
       </div>
     `;
-    grid.appendChild(item);
-  });
-
-  grid.addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.gallery-delete');
-    if (!btn) return;
-    const idx = Number(btn.dataset.index);
-    const list = loadPhotos();
-    list.splice(idx, 1);
-    savePhotos(list);
-    renderPhotos();
-  }, { once: true });
+    grid.appendChild(tile);
+  }
 }
 
-function handleFiles(files) {
-  const maxPhotos = 48;
-  const existing = loadPhotos();
-  if (existing.length >= maxPhotos) {
-    alert('Dosegnut je maksimalan broj fotografija (' + maxPhotos + '). Obrišite neke stare da bi dodali nove.');
-    return;
+function addPhotoFromFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const photos = loadPhotos();
+    const now = new Date();
+    const stamp = `${now.getDate().toString().padStart(2,"0")}.${(now.getMonth()+1).toString().padStart(2,"0")}.${now.getFullYear()}. ${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`;
+    photos.unshift({
+      data: reader.result,
+      label: file.name,
+      date: stamp
+    });
+    savePhotos(photos);
+    renderPhotos();
+  };
+  reader.readAsDataURL(file);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const addBtn = document.getElementById("btn-add-photo");
+  const clearBtn = document.getElementById("btn-clear-photos");
+  const fileInput = document.getElementById("file-input");
+
+  if (addBtn && fileInput) {
+    addBtn.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", (ev) => {
+      const file = ev.target.files?.[0];
+      if (!file) return;
+      addPhotoFromFile(file);
+      fileInput.value = "";
+    });
   }
 
-  const slice = Array.from(files).slice(0, maxPhotos - existing.length);
-  if (!slice.length) return;
-
-  let remaining = slice.length;
-  const newItems = [];
-
-  slice.forEach(file => {
-    if (!file.type.startsWith('image/')) {
-      remaining--;
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      newItems.push({
-        data: reader.result,
-        label: file.name
-      });
-      remaining--;
-      if (remaining === 0) {
-        const merged = existing.concat(newItems);
-        savePhotos(merged);
-        renderPhotos();
-      }
-    };
-    reader.onerror = () => {
-      remaining--;
-      if (remaining === 0) {
-        const merged = existing.concat(newItems);
-        savePhotos(merged);
-        renderPhotos();
-      }
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function initGallery() {
-  const fileInput = document.querySelector('#photo-input');
-  const drop = document.querySelector('[data-drop-zone]');
-  const clearBtn = document.querySelector('[data-clear-photos]');
-
-  if (!fileInput || !drop) return;
-
-  drop.addEventListener('click', () => fileInput.click());
-
-  fileInput.addEventListener('change', (ev) => {
-    if (ev.target.files?.length) {
-      handleFiles(ev.target.files);
-      fileInput.value = '';
-    }
-  });
-
-  ['dragenter','dragover'].forEach(evt => {
-    drop.addEventListener(evt, (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      drop.style.borderColor = 'rgba(52,211,153,0.95)';
-    });
-  });
-
-  ['dragleave','drop'].forEach(evt => {
-    drop.addEventListener(evt, (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      drop.style.borderColor = 'rgba(148,163,184,0.55)';
-    });
-  });
-
-  drop.addEventListener('drop', (e) => {
-    const files = e.dataTransfer?.files;
-    if (files?.length) {
-      handleFiles(files);
-    }
-  });
-
   if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-      if (confirm('Obrisati sve spremljene fotografije iz uređaja?')) {
-        localStorage.removeItem(PHOTOS_KEY);
-        renderPhotos();
-      }
+    clearBtn.addEventListener("click", () => {
+      if (!confirm("Obrisati sve spremljene fotografije s ovog uređaja?")) return;
+      savePhotos([]);
+      renderPhotos();
     });
   }
 
   renderPhotos();
-}
-
-document.addEventListener('DOMContentLoaded', initGallery);
+});

@@ -3,28 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <title>Podsjetnici – Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="">
   <div class="app-shell">
-    <div class="app-content">
-      <header class="page-header">
-        <div>
-          <a href="index.html" class="back-link">← Natrag na početni ekran</a>
-          <h1>Podsjetnici</h1>
-          <p class="text-muted">Ovdje će kasnije biti puni raspored lijekova i obaveza.</p>
+    <header class="app-header">
+      <div class="app-header__top">
+        <div class="brand">
+          <div class="brand__title">Dora Asistent</div>
+          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
         </div>
-      </header>
-      <section class="list-card">
-        <div class="section-label">Primjer današnjih podsjetnika</div>
-        <ul class="simple-list">
-          <li>10:00 – Lijek za tlak (Božo)</li>
-          <li>10:15 – Lijek za tlak (Kristina)</li>
-          <li>18:00 – Večernji lijekovi</li>
-        </ul>
-      </section>
+        <div class="device-status">
+          <span></span>
+          Uređaj spreman za korištenje
+        </div>
+      </div>
+      <div class="app-header__meta">
+        <div class="meta-line">
+          <strong>Danas:</strong>
+          <span id="meta-date"></span>
+        </div>
+        <div class="meta-line">
+          <strong>Na uređaju:</strong>
+          <span id="meta-time"></span>
+        </div>
+      </div>
+    </header>
+
+  <main class="app-main">
+    <div class="weather-header">
+      <a href="index.html" class="back-link">⟵ Natrag</a>
+      <div>
+        <div class="page-title">Podsjetnici</div>
+        <div class="page-subtitle">Lijekovi i dnevne obveze</div>
+      </div>
     </div>
+    <section>
+      <div class="panel-soft">
+        <p><strong>Ova stranica će kasnije dobiti punu funkcionalnost.</strong></p>
+        <p>U finalnoj verziji ovdje će biti jednostavni podsjetnici za lijekove i druge obveze.</p>
+      </div>
+    </section>
+  </main>
+
   </div>
   <script src="js/main.js"></script>
 </body>
