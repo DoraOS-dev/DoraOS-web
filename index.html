@@ -1,14 +1,81 @@
-<!DOCTYPE html><html lang="hr"><head>
-<meta charset="UTF-8"><title>Dora Asistent</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/styles.css"></head>
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 <body>
-<header class="app-header"><h1>Dora Asistent</h1></header>
-<main class="menu">
-<button onclick="location.href='weather.html'">Vrijeme</button>
-<button onclick="location.href='reminders.html'">Podsjetnici</button>
-<button onclick="location.href='family.html'">Poruke</button>
-<button onclick="location.href='ai.html'">Dora pomoć</button>
-<button onclick="location.href='photos.html'">Foto album</button>
-<button onclick="location.href='video.html'">Video poziv</button>
-</main></body></html>
+  <div class="app-shell">
+    <div class="app-content">
+      <header class="app-header">
+        <div class="app-header__title">
+          <div class="app-logo-row">
+            <div class="app-logo-dot"><span></span></div>
+            <h1>Dora Asistent</h1>
+          </div>
+          <p class="app-header__subtitle">
+            Virtualni skrbnik za Božu i Kristinu – veliki gumbi, jasne poruke i podsjetnici.
+          </p>
+          <div class="app-header__meta">
+            <span class="app-tag">
+              <span class="app-tag-dot"></span>
+              <span>Na uređaju – bez oblaka</span>
+            </span>
+            <span class="app-clock" data-clock></span>
+          </div>
+        </div>
+      </header>
+
+      <main class="app-main-grid">
+        <section class="app-card">
+          <div class="app-card__header">
+            <div class="section-label">
+              Glavni izbornik
+            </div>
+            <span class="app-card__hint">Sve najvažnije funkcije na jednom mjestu</span>
+          </div>
+          <div class="app-main-buttons">
+            <button class="btn btn--primary" onclick="location.href='weather.html'">
+              <span>☁️ Vrijeme</span>
+            </button>
+            <button class="btn btn--ghost" onclick="location.href='reminders.html'">
+              <span>⏰ Podsjetnici</span>
+            </button>
+            <button class="btn btn--ghost" onclick="location.href='messages.html'">
+              <span>💬 Poruke</span>
+            </button>
+            <button class="btn btn--ghost" onclick="location.href='dora.html'">
+              <span>🧠 Dora pomoć</span>
+            </button>
+            <button class="btn btn--ghost" onclick="location.href='photos.html'">
+              <span>📸 Foto album</span>
+            </button>
+            <button class="btn btn--ghost" onclick="location.href='video.html'">
+              <span>📞 Video poziv</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="app-secondary-card">
+          <div class="app-card__header">
+            <div class="section-label">Danas</div>
+          </div>
+          <div class="text-muted" style="font-size:14px; line-height:1.5;">
+            Ova probna verzija Dora Asistenta radi potpuno lokalno u pregledniku.
+            <br /><br />
+            • <strong>Foto album</strong> sprema slike u <em>localStorage</em> ovog uređaja
+            (bez slanja na internet).<br />
+            • <strong>Vrijeme</strong> čita prognozu za Vrbnik s Open‑Meteo servisa.<br />
+            • Ostale stranice (Poruke, Podsjetnici, Dora pomoć) zasad su pojednostavljeni
+            prikaz – spremni za kasnije proširenje.
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,1 +1,57 @@
-<html><body><h1>photos</h1></body></html>
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Foto album – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell app--photos">
+    <div class="app-content">
+      <header class="page-header">
+        <div>
+          <a href="index.html" class="back-link">← Natrag na početni ekran</a>
+          <h1>Obiteljski foto album</h1>
+          <p class="text-muted">Fotografije se spremaju samo na ovaj uređaj (localStorage).</p>
+        </div>
+      </header>
+
+      <section class="gallery-layout">
+        <div class="gallery-uploader">
+          <div class="gallery-drop" data-drop-zone>
+            <h2>Dodaj nove fotografije</h2>
+            <p>Dodirnite ovdje ili povucite slike s računala. Podržane su JPG i PNG datoteke.</p>
+            <input type="file" id="photo-input" multiple accept="image/*" />
+          </div>
+          <div class="btn-row">
+            <button class="btn-small" onclick="document.getElementById('photo-input').click();">
+              📂 Odaberi iz mape
+            </button>
+            <button class="btn-small btn-small--danger" data-clear-photos>
+              🗑 Obriši sve fotografije iz uređaja
+            </button>
+          </div>
+          <p class="text-muted" style="margin-top:10px; font-size:13px;">
+            Fotografije su vidljive samo na ovom tabletu / računalu i ne šalju se na internet.
+            Preporučeno je <strong>do 40‑ak slika</strong> kako bi aplikacija ostala brza.
+          </p>
+        </div>
+
+        <div class="gallery-uploader">
+          <div class="app-card__header" style="margin-bottom:8px;">
+            <div class="section-label">
+              Sačuvane fotografije
+            </div>
+            <span class="app-card__hint">Ukupno: <span data-photo-count>0</span></span>
+          </div>
+          <div class="gallery-grid" data-gallery-grid></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/photos.js"></script>
+</body>
+</html>

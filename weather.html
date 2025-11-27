@@ -1,10 +1,78 @@
-<!DOCTYPE html><html lang="hr"><head>
-<meta charset="UTF-8"><title>Vrijeme</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/styles.css"></head>
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vrijeme – Dora Asistent</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 <body>
-<h1>Vrijeme u Vrbniku</h1>
-<div id="current"></div>
-<div id="forecast"></div>
-<button onclick="loadWeather()">Osvježi</button>
-<script src="js/weather.js"></script></body></html>
+  <div class="app-shell app--weather">
+    <div class="app-content">
+      <header class="page-header">
+        <div>
+          <a href="index.html" class="back-link">← Natrag na početni ekran</a>
+          <h1>Vrijeme u Vrbniku</h1>
+          <p class="text-muted">Trenutna prognoza i sljedeća 3 dana</p>
+        </div>
+        <button class="btn btn--ghost btn--pill" data-refresh-weather>
+          🔄 Osvježi
+        </button>
+      </header>
+
+      <section class="weather-layout">
+        <div class="weather-main">
+          <div class="weather-main-top">
+            <div class="weather-main-temp">
+              <div class="weather-icon"><span>☁️</span></div>
+              <div>
+                <div id="weather-temp" class="weather-temp-value" data-weather-temp>--°C</div>
+                <div id="weather-desc" data-weather-desc class="text-muted">Učitavanje...</div>
+              </div>
+            </div>
+            <div class="weather-main-meta">
+              <div>Osjećaj: <span data-weather-feels>--°</span></div>
+              <div>Ažurirano: <span data-weather-time>---</span></div>
+            </div>
+          </div>
+
+          <div class="weather-grid">
+            <div class="weather-pill">
+              <strong>Vjetar</strong>
+              <span data-weather-wind>-- km/h</span>
+            </div>
+            <div class="weather-pill">
+              <strong>Vlaga</strong>
+              <span data-weather-humid>-- %</span>
+            </div>
+            <div class="weather-pill">
+              <strong>Lokacija</strong>
+              <span>Vrbnik</span>
+            </div>
+            <div class="weather-pill">
+              <strong>Mjerenje</strong>
+              <span>Open‑Meteo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="weather-forecast">
+          <div class="app-card__header" style="margin-bottom:4px;">
+            <div class="section-label">Sljedeća 3 dana</div>
+          </div>
+          <div data-forecast-list></div>
+        </div>
+      </section>
+
+      <p class="text-muted" style="margin-top:18px; font-size:13px;">
+        Podaci se preuzimaju s Open‑Meteo servisa na temelju geolokacije Vrbnika.
+        Vrijednosti su informativne i mogu odstupati od lokalnih mjerenja.
+      </p>
+      <p data-weather-error style="display:none; color:#fecaca; font-size:13px; margin-top:6px;"></p>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/weather.js"></script>
+</body>
+</html>
