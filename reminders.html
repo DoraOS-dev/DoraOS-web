@@ -1,1 +1,53 @@
-placeholder
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Podsjetnik - Dora Asistent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="app-shell">
+<header class="sub-header">
+    <a href="index.html" class="btn-back">← Natrag na početnu</a>
+    <h1>Podsjetnik</h1>
+</header>
+
+<main class="app-main">
+    <section class="card">
+        <h2 class="card-title">Vrijeme uzimanja lijeka</h2>
+        <p class="card-subtitle">
+            Ovdje možete postaviti dva osnovna podsjetnika (npr. jutro i večer).
+            Vrijeme se koristi za prikaz podsjetnika u glavnom sučelju ili u budućim verzijama sustava.
+        </p>
+
+        <div class="reminder-grid">
+            <div class="reminder-column">
+                <label for="timeMorning">Jutarnji lijek</label>
+                <input type="time" id="timeMorning" />
+            </div>
+            <div class="reminder-column">
+                <label for="timeEvening">Večernji lijek</label>
+                <input type="time" id="timeEvening" />
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="reminderNote">Dodatna napomena</label>
+            <textarea id="reminderNote" rows="3" placeholder="Npr. &quot;Lijek uzeti nakon doručka&quot; ili &quot;Prije spavanja&quot;."></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button id="btnSaveReminders" class="btn btn-primary">Spremi podsjetnike</button>
+            <span id="reminderSaved" class="save-indicator"></span>
+        </div>
+
+        <p class="small-note">
+            Napomena: Ovo je lokalni podsjetnik. Ne šalje se na mobilne uređaje –
+            ali u sljedećim verzijama možemo dodati i tu mogućnost.
+        </p>
+    </section>
+</main>
+
+<script src="js/reminders.js"></script>
+</body>
+</html>

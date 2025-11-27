@@ -1,1 +1,47 @@
-placeholder
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Poruke - Dora Asistent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="app-shell">
+<header class="sub-header">
+    <a href="index.html" class="btn-back">← Natrag na početnu</a>
+    <h1>Poruke</h1>
+</header>
+
+<main class="app-main">
+    <section class="card">
+        <h2 class="card-title">Dnevne poruke za Božu i Kristinu</h2>
+        <p class="card-subtitle">
+            Ovdje možete upisati jednostavne poruke koje će roditelji vidjeti svaki put kada otvore ovu stranicu.
+        </p>
+
+        <div class="form-grid">
+            <div class="form-column">
+                <label for="msgBozo">Poruka za Božu</label>
+                <textarea id="msgBozo" rows="6" placeholder="Dragi Božo, danas trebaš popiti lijek ujutro i navečer..."></textarea>
+            </div>
+            <div class="form-column">
+                <label for="msgKristina">Poruka za Kristinu</label>
+                <textarea id="msgKristina" rows="6" placeholder="Draga Kristina, danas te čeka kratka šetnja i vježbe..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <label for="msgGeneral">Opća poruka / podsjetnik</label>
+            <textarea id="msgGeneral" rows="4" placeholder="Zajednička poruka za oboje (npr. posjeta doktora, dolazak djece...)"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button id="btnSaveMessages" class="btn btn-primary">Spremi poruke</button>
+            <span id="msgSaved" class="save-indicator"></span>
+        </div>
+    </section>
+</main>
+
+<script src="js/messages.js"></script>
+</body>
+</html>

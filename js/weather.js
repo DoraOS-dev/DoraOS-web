@@ -1,84 +1,144 @@
-// Jednostavna prognoza za Vrbnik putem Open-Meteo
-const CURRENT_URL =
-  "https://api.open-meteo.com/v1/forecast?latitude=45.078&longitude=14.674&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=4&timezone=Europe%2FBerlin";
+// Jednostavna integracija s Open-Meteo za Vrbnik
 
-const weatherCurrent = document.getElementById("weather-current");
-const weatherForecast = document.getElementById("weather-forecast");
-
-const WMO = {
-  0: "Vedro",
-  1: "Pretežno vedro",
-  2: "Djelomično oblačno",
-  3: "Oblačno",
-  45: "Magla",
-  48: "Magla s mrazom",
-  51: "Slaba rosulja",
-  61: "Slaba kiša",
-  63: "Umjerena kiša",
-  65: "Jaka kiša",
-  71: "Slab snijeg",
-  80: "Pljusak",
-  95: "Grmljavina"
+const VRBNIK_COORDS = {
+    latitude: 45.072,   // približno
+    longitude: 14.674
 };
 
-function codeToText(code) {
-  return WMO[code] || "Promjenjivo";
+function buildWeatherUrl() {
+    const { latitude, longitude } = VRBNIK_COORDS;
+    const params = new URLSearchParams({
+        latitude,
+        longitude,
+        current: "temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code",
+        daily: "weather_code,temperature_2m_max,temperature_2m_min",
+        timezone: "auto"
+    });
+    return "https://api.open-meteo.com/v1/forecast?" + params.toString();
 }
 
-function formatDayLabel(dateStr) {
-  const d = new Date(dateStr);
-  const days = ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"];
-  return days[d.getDay()];
+function codeToDesc(code) {
+    const map = {
+        0: "Vedro",
+        1: "Pretežno vedro",
+        2: "Djelomično oblačno",
+        3: "Oblačno",
+        45: "Magla",
+        48: "Inje / smrzavajuća magla",
+        51: "Rominjanje",
+        53: "Umjereno rominjanje",
+        55: "Jako rominjanje",
+        61: "Slaba kiša",
+        63: "Umjerena kiša",
+        65: "Jaka kiša",
+        71: "Slab snijeg",
+        73: "Umjeren snijeg",
+        75: "Jak snijeg",
+        80: "Pljuskovi",
+        95: "Grmljavina"
+    };
+    return map[code] || "Vrijeme";
 }
 
 async function loadWeather() {
-  try {
-    const res = await fetch(CURRENT_URL);
-    if (!res.ok) throw new Error("Network error");
-    const data = await res.json();
-
-    const c = data.current;
-    const desc = codeToText(c.weather_code);
-
-    weatherCurrent.innerHTML = `
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <div style="font-size:2.4rem;">${Math.round(c.temperature_2m)}°C</div>
-        <div style="display:flex;flex-direction:column;gap:2px;font-size:0.95rem;">
-          <strong>${desc}</strong>
-          <span>Osjećaj: ${Math.round(c.apparent_temperature)}°C</span>
-          <span>Vjetar: ${Math.round(c.wind_speed_10m)} km/h</span>
-          <span>Vlaga: ${Math.round(c.relative_humidity_2m)} %</span>
-        </div>
-      </div>
-      <p class="card-subtitle" style="margin-top:10px;">
-        Ažurirano: ${data.current_units.time ? "" : ""}${data.current.time.replace("T", " u ")}
-      </p>
-    `;
-
-    const days = data.daily;
-    let html = '<h3 style="margin:18px 0 8px;">Sljedeća 3 dana</h3>';
-    html += '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
-
-    for (let i = 1; i <= 3; i++) {
-      html += `
-        <div style="flex:1 1 120px;padding:10px 12px;border-radius:14px;background:#020617;border:1px solid rgba(148,163,184,0.35);">
-          <div style="font-size:0.9rem;margin-bottom:4px;">${formatDayLabel(days.time[i])}</div>
-          <div style="font-size:0.85rem;color:var(--text-soft);margin-bottom:4px;">${codeToText(
-            days.weather_code[i]
-          )}</div>
-          <div style="font-weight:600;">${Math.round(days.temperature_2m_min[i])}–${Math.round(
-        days.temperature_2m_max[i]
-      )}°C</div>
-        </div>
-      `;
+    const url = buildWeatherUrl();
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        renderWeatherMain(data);
+        renderWeatherDetail(data);
+    } catch (err) {
+        console.error("Weather error", err);
     }
-
-    html += "</div>";
-    weatherForecast.innerHTML = html;
-  } catch (e) {
-    console.error(e);
-    weatherCurrent.textContent = "Ne mogu dohvatiti podatke o vremenu. Pokušajte kasnije.";
-  }
 }
 
-loadWeather();
+function renderWeatherMain(data) {
+    const tempEl = document.getElementById("weather-temp");
+    const descEl = document.getElementById("weather-desc");
+    const feelsEl = document.getElementById("weather-feels");
+    const windEl = document.getElementById("weather-wind");
+    const humEl = document.getElementById("weather-humidity");
+    const updEl = document.getElementById("weather-updated");
+    const nextEl = document.getElementById("weatherNext");
+
+    if (!data || !data.current) return;
+
+    const c = data.current;
+    const d = data.daily;
+
+    if (tempEl) tempEl.textContent = Math.round(c.temperature_2m) + "°C";
+    if (feelsEl) feelsEl.textContent = Math.round(c.apparent_temperature) + "°C";
+    if (windEl) windEl.textContent = Math.round(c.wind_speed_10m) + " km/h";
+    if (humEl) humEl.textContent = Math.round(c.relative_humidity_2m) + " %";
+    if (descEl) descEl.textContent = codeToDesc(c.weather_code);
+
+    if (updEl && data.current_units && data.current.time) {
+        const dt = new Date(data.current.time);
+        const fmt = new Intl.DateTimeFormat("hr-HR", {
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+        updEl.textContent = fmt.format(dt);
+    }
+
+    if (nextEl && d) {
+        nextEl.innerHTML = "";
+        for (let i = 0; i < Math.min(3, d.time.length); i++) {
+            const day = document.createElement("div");
+            day.className = "weather-day";
+            const date = new Date(d.time[i]);
+            const label = new Intl.DateTimeFormat("hr-HR", { weekday: "short", day: "2-digit", month: "2-digit" }).format(date);
+            day.innerHTML = `
+                <span><strong>${label}</strong></span>
+                <span>${codeToDesc(d.weather_code[i])}</span>
+                <span>${Math.round(d.temperature_2m_min[i])}–${Math.round(d.temperature_2m_max[i])}°C</span>
+            `;
+            nextEl.appendChild(day);
+        }
+    }
+}
+
+function renderWeatherDetail(data) {
+    const nowEl = document.getElementById("weather-detail-now");
+    const daysEl = document.getElementById("weather-detail-days");
+    if (!data || !data.current || (!nowEl && !daysEl)) return;
+
+    if (nowEl) {
+        const c = data.current;
+        nowEl.innerHTML = `
+            <div class="weather-temp">${Math.round(c.temperature_2m)}°C</div>
+            <div class="weather-desc">
+                <div>${codeToDesc(c.weather_code)}</div>
+                <div class="weather-meta">
+                    <span>Osjećaj: ${Math.round(c.apparent_temperature)}°C</span>
+                    <span>Vjetar: ${Math.round(c.wind_speed_10m)} km/h</span>
+                    <span>Vlaga: ${Math.round(c.relative_humidity_2m)} %</span>
+                </div>
+            </div>
+        `;
+    }
+
+    if (daysEl && data.daily) {
+        const d = data.daily;
+        daysEl.innerHTML = "";
+        for (let i = 0; i < d.time.length; i++) {
+            const div = document.createElement("div");
+            div.className = "weather-day";
+            const date = new Date(d.time[i]);
+            const label = new Intl.DateTimeFormat("hr-HR", { weekday: "short", day: "2-digit", month: "2-digit" }).format(date);
+            div.innerHTML = `
+                <span><strong>${label}</strong></span>
+                <span>${codeToDesc(d.weather_code[i])}</span>
+                <span>${Math.round(d.temperature_2m_min[i])}–${Math.round(d.temperature_2m_max[i])}°C</span>
+            `;
+            daysEl.appendChild(div);
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // pokreće se i na index.html i na weather.html
+    loadWeather();
+});

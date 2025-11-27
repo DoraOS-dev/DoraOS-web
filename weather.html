@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Vrijeme u Vrbniku – Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <script defer src="js/weather.js"></script>
+    <meta charset="UTF-8" />
+    <title>Vrijeme - Dora Asistent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
-  <div class="page-shell">
-    <button class="nav-button nav-button--outline" onclick="window.location.href='index.html'">
-      ← Natrag
-    </button>
+<body class="app-shell">
+<header class="sub-header">
+    <a href="index.html" class="btn-back">← Natrag na početnu</a>
+    <h1>Vrijeme u Vrbniku</h1>
+</header>
 
-    <section class="card card--primary" style="margin-top:14px;">
-      <h1 class="card-title">Vrijeme u Vrbniku</h1>
-      <p class="card-subtitle">Trenutna prognoza i sljedeća 3 dana</p>
-
-      <div id="weather-current" class="weather-current">
-        Učitavanje podataka o vremenu...
-      </div>
-
-      <div id="weather-forecast" class="weather-forecast"></div>
-
-      <p class="storage-note" style="margin-top:12px;">
-        Podaci se preuzimaju s Open-Meteo servisa na temelju geolokacije Vrbnika.
-        Vrijednosti su informativne i mogu odstupati od lokalnih mjerenja.
-      </p>
+<main class="app-main">
+    <section class="card">
+        <h2 class="card-title">Trenutna prognoza</h2>
+        <div id="weather-detail-now" class="weather-now"></div>
     </section>
-  </div>
+
+    <section class="card">
+        <h2 class="card-title">Sljedeća 3 dana</h2>
+        <div id="weather-detail-days" class="weather-next"></div>
+    </section>
+
+    <p class="weather-note">
+        Podaci se preuzimaju s Open-Meteo servisa na temelju geolokacije Vrbnika.
+    </p>
+</main>
+
+<script src="js/weather.js"></script>
 </body>
 </html>

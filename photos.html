@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html lang="hr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Foto album – Dora Asistent</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <script defer src="js/photos.js"></script>
+    <meta charset="UTF-8" />
+    <title>Foto album - Dora Asistent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
-  <div class="page-shell">
-    <button class="nav-button nav-button--outline" onclick="window.location.href='index.html'">
-      ← Natrag
-    </button>
+<body class="app-shell">
+<header class="sub-header">
+    <a href="index.html" class="btn-back">← Natrag na početnu</a>
+    <h1>Foto album</h1>
+</header>
 
-    <section class="card card--primary" style="margin-top:14px;">
-      <h1 class="card-title">Foto album</h1>
-      <p class="card-subtitle">
-        Dodajte omiljene slike obitelji. Sve se sprema samo na ovaj uređaj (localStorage).
-      </p>
+<main class="app-main">
+    <section class="card">
+        <h2 class="card-title">Slike obitelji i lijepih trenutaka</h2>
+        <p class="card-subtitle">
+            Fotografije se spremaju samo lokalno na ovaj uređaj (u preglednik).
+            Ne šalju se na internet.
+        </p>
 
-      <div style="margin:10px 0 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-        <label class="nav-button nav-button--orange" style="cursor:pointer;">
-          📸 Dodaj fotografije
-          <input id="photoInput" type="file" accept="image/*" multiple style="display:none;" />
-        </label>
-        <button id="clearPhotos" class="nav-button nav-button--outline">
-          🗑 Obriši sve slike
-        </button>
-      </div>
+        <div class="photo-upload">
+            <label for="photoInput" class="btn btn-primary">📸 Dodaj novu sliku</label>
+            <input id="photoInput" type="file" accept="image/*" />
+            <button id="btnClearPhotos" class="btn btn-secondary">Obriši sve slike</button>
+        </div>
 
-      <div id="photoGrid" class="photo-grid"></div>
-
-      <p class="storage-note" style="margin-top:12px;">
-        Napomena: slike se ne šalju na internet – čuvaju se samo lokalno u pregledniku
-        (localStorage). Ako izbrišete podatke preglednika, slike će nestati.
-      </p>
+        <div id="photoGrid" class="photo-grid">
+            <!-- slike će se prikazati ovdje -->
+        </div>
     </section>
-  </div>
+</main>
+
+<script src="js/photos.js"></script>
 </body>
 </html>
