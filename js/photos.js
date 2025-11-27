@@ -1,93 +1,88 @@
-const PHOTO_KEY = "dora_photos_v1";
+// Dora Asistent – lokalni foto album (localStorage)
+
+const PHOTOS_KEY = "dora_photos_v1";
 
 function loadPhotos() {
   try {
-    const raw = localStorage.getItem(PHOTO_KEY);
+    const raw = localStorage.getItem(PHOTOS_KEY);
     if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
+    return JSON.parse(raw);
+  } catch (e) {
+    console.warn("Ne mogu učitati fotografije", e);
     return [];
   }
 }
 
 function savePhotos(list) {
-  try {
-    localStorage.setItem(PHOTO_KEY, JSON.stringify(list));
-  } catch {
-    // ignore
-  }
+  localStorage.setItem(PHOTOS_KEY, JSON.stringify(list));
 }
 
 function renderPhotos() {
-  const grid = document.getElementById("photo-grid");
+  const grid = document.getElementById("photoGrid");
   if (!grid) return;
   const photos = loadPhotos();
-
   grid.innerHTML = "";
-  if (photos.length === 0) {
-    const empty = document.createElement("p");
-    empty.style.marginTop = "14px";
-    empty.style.color = "var(--text-soft)";
-    empty.style.fontSize = "0.86rem";
-    empty.textContent = "Još nema spremljenih fotografija. Dodaj prvu sliku gumbom iznad.";
-    grid.appendChild(empty);
+  if (!photos.length) {
+    grid.innerHTML = '<p style="color:#9ca3af;font-size:0.9rem;">Još nema spremljenih fotografija.</p>';
     return;
   }
-
-  for (const p of photos) {
-    const tile = document.createElement("div");
-    tile.className = "photo-tile";
-    tile.innerHTML = `
-      <img src="${p.data}" alt="Porodična fotografija" />
-      <div class="photo-tile__meta">
-        <div>${p.label || "Fotografija"}</div>
-        <div style="opacity:0.7;">${p.date || ""}</div>
-      </div>
-    `;
-    grid.appendChild(tile);
-  }
+  photos.forEach((src, index) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "photo-item";
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `Fotografija ${index + 1}`;
+    const del = document.createElement("button");
+    del.textContent = "✕";
+    del.addEventListener("click", () => {
+      const arr = loadPhotos();
+      arr.splice(index, 1);
+      savePhotos(arr);
+      renderPhotos();
+    });
+    wrapper.appendChild(img);
+    wrapper.appendChild(del);
+    grid.appendChild(wrapper);
+  });
 }
 
-function addPhotoFromFile(file) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    const photos = loadPhotos();
-    const now = new Date();
-    const stamp = `${now.getDate().toString().padStart(2,"0")}.${(now.getMonth()+1).toString().padStart(2,"0")}.${now.getFullYear()}. ${now.getHours().toString().padStart(2,"0")}:${now.getMinutes().toString().padStart(2,"0")}`;
-    photos.unshift({
-      data: reader.result,
-      label: file.name,
-      date: stamp
-    });
-    savePhotos(photos);
+function handleFiles(files) {
+  if (!files || !files.length) return;
+  const existing = loadPhotos();
+  const readers = [];
+  Array.from(files).forEach((file) => {
+    const reader = new FileReader();
+    readers.push(
+      new Promise((resolve) => {
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      })
+    );
+  });
+
+  Promise.all(readers).then((results) => {
+    const next = existing.concat(results);
+    savePhotos(next);
     renderPhotos();
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const addBtn = document.getElementById("btn-add-photo");
-  const clearBtn = document.getElementById("btn-clear-photos");
-  const fileInput = document.getElementById("file-input");
-
-  if (addBtn && fileInput) {
-    addBtn.addEventListener("click", () => fileInput.click());
-    fileInput.addEventListener("change", (ev) => {
-      const file = ev.target.files?.[0];
-      if (!file) return;
-      addPhotoFromFile(file);
-      fileInput.value = "";
+  const input = document.getElementById("photoInput");
+  const clearBtn = document.getElementById("clearPhotos");
+  if (input) {
+    input.addEventListener("change", () => {
+      handleFiles(input.files);
+      input.value = "";
     });
   }
-
   if (clearBtn) {
     clearBtn.addEventListener("click", () => {
-      if (!confirm("Obrisati sve spremljene fotografije s ovog uređaja?")) return;
-      savePhotos([]);
-      renderPhotos();
+      if (confirm("Obrisati sve fotografije iz albuma?")) {
+        savePhotos([]);
+        renderPhotos();
+      }
     });
   }
-
   renderPhotos();
 });

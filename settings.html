@@ -6,48 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="">
-  <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <div class="brand">
-          <div class="brand__title">Dora Asistent</div>
-          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
-        </div>
-        <div class="device-status">
-          <span></span>
-          Uređaj spreman za korištenje
-        </div>
-      </div>
-      <div class="app-header__meta">
-        <div class="meta-line">
-          <strong>Danas:</strong>
-          <span id="meta-date"></span>
-        </div>
-        <div class="meta-line">
-          <strong>Na uređaju:</strong>
-          <span id="meta-time"></span>
-        </div>
-      </div>
+<body class="app app--settings">
+  <div class="app-shell app-shell--centered">
+    <header class="app-header app-header--compact">
+      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
+      <h1 class="app-title">Postavke</h1>
     </header>
 
-  <main class="app-main">
-    <div class="weather-header">
-      <a href="index.html" class="back-link">⟵ Natrag</a>
-      <div>
-        <div class="page-title">Postavke uređaja</div>
-        <div class="page-subtitle">Osnovne postavke Dora Asistenta</div>
-      </div>
-    </div>
-    <section>
-      <div class="panel-soft">
-        <p><strong>Ova stranica će kasnije dobiti punu funkcionalnost.</strong></p>
-        <p>Kasnije će ovdje biti postavke jezika, glasnoće, načina rada i drugo.</p>
-      </div>
-    </section>
-  </main>
+    <main class="settings-main">
+      <section class="settings-card" id="pinGate">
+        <h2>Unesite PIN</h2>
+        <p>Za pristup postavkama upišite četveroznamenkasti PIN.</p>
+        <div class="pin-inputs">
+          <input type="password" maxlength="1" inputmode="numeric" />
+          <input type="password" maxlength="1" inputmode="numeric" />
+          <input type="password" maxlength="1" inputmode="numeric" />
+          <input type="password" maxlength="1" inputmode="numeric" />
+        </div>
+        <button class="primary-btn" id="pinSubmit">Potvrdi</button>
+        <p class="settings-error" id="pinError"></p>
+      </section>
 
+      <section class="settings-card settings-card--content" id="settingsContent" hidden>
+        <h2>Osnovne postavke</h2>
+        <label class="settings-row">
+          <span>Ime korisnika (prikaz na ekranu)</span>
+          <input type="text" id="displayName" placeholder="Božo i Kristina" />
+        </label>
+
+        <label class="settings-row">
+          <span>Zvuk obavijesti</span>
+          <label class="switch">
+            <input type="checkbox" id="settingsSound" />
+            <span class="slider"></span>
+          </label>
+        </label>
+
+        <div class="settings-row">
+          <span>Napomena</span>
+          <textarea id="notes" rows="3" placeholder="Dodatne informacije za skrbnika..."></textarea>
+        </div>
+
+        <button class="primary-btn" id="saveSettings">Spremi postavke</button>
+        <p class="settings-info" id="settingsSaved" hidden>Postavke su spremljene.</p>
+      </section>
+    </main>
   </div>
-  <script src="js/main.js"></script>
+
+  <script src="js/settings.js"></script>
 </body>
 </html>

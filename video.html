@@ -6,48 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="">
+<body class="app">
   <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <div class="brand">
-          <div class="brand__title">Dora Asistent</div>
-          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
-        </div>
-        <div class="device-status">
-          <span></span>
-          Uređaj spreman za korištenje
-        </div>
-      </div>
-      <div class="app-header__meta">
-        <div class="meta-line">
-          <strong>Danas:</strong>
-          <span id="meta-date"></span>
-        </div>
-        <div class="meta-line">
-          <strong>Na uređaju:</strong>
-          <span id="meta-time"></span>
-        </div>
-      </div>
+    <header class="app-header app-header--compact">
+      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
+      <h1 class="app-title">Video poziv</h1>
     </header>
-
-  <main class="app-main">
-    <div class="weather-header">
-      <a href="index.html" class="back-link">⟵ Natrag</a>
-      <div>
-        <div class="page-title">Video poziv</div>
-        <div class="page-subtitle">Jedan gumb za razgovor</div>
-      </div>
-    </div>
-    <section>
-      <div class="panel-soft">
-        <p><strong>Ova stranica će kasnije dobiti punu funkcionalnost.</strong></p>
-        <p>Za sada je ovo samo info stranica. U budućnosti će se ovdje otvarati video poziv preko odabranog servisa (npr. WhatsApp / Messenger).</p>
-      </div>
-    </section>
-  </main>
-
+    <main class="app-main app-main--narrow">
+      <section class="card">
+        <p>Ovdje možete dodati ikone ili poveznice za WhatsApp, Viber, Messenger ili drugi servis za video poziv.</p>
+        <p>Za sada prikazujemo samo tekstualne upute.</p>
+      </section>
+    </main>
   </div>
-  <script src="js/main.js"></script>
 </body>
 </html>

@@ -2,117 +2,49 @@
 <html lang="hr">
 <head>
   <meta charset="UTF-8" />
-  <title>Vrijeme – Dora Asistent</title>
+  <title>Vrijeme u Vrbniku – Dora Asistent</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="weather-layout">
+<body class="app">
   <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <div class="brand">
-          <div class="brand__title">Dora Asistent</div>
-          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
-        </div>
-        <div class="device-status">
-          <span></span>
-          Uređaj spreman za korištenje
-        </div>
-      </div>
-      <div class="app-header__meta">
-        <div class="meta-line">
-          <strong>Danas:</strong>
-          <span id="meta-date"></span>
-        </div>
-        <div class="meta-line">
-          <strong>Na uređaju:</strong>
-          <span id="meta-time"></span>
-        </div>
-      </div>
+    <header class="app-header app-header--compact">
+      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
+      <h1 class="app-title">Vrijeme u Vrbniku</h1>
     </header>
 
-  <main class="app-main">
-    <div class="weather-header">
-      <a href="index.html" class="back-link">⟵ Natrag</a>
-      <div>
-        <div class="page-title">Vrijeme u Vrbniku</div>
-        <div class="page-subtitle">Trenutna prognoza i sljedeća 3 dana</div>
-      </div>
-    </div>
-
-    <section class="weather-grid">
-      <article class="weather-current">
-        <div class="weather-current-main">
-          <div class="weather-main-left">
-            <div id="weather-icon" class="weather-icon-badge">☁️</div>
-            <div class="weather-main-temp">
-              <span id="weather-temp" class="value">--°C</span>
-              <span id="weather-desc" class="label">Učitavanje…</span>
-            </div>
+    <main class="app-main app-main--narrow">
+      <section class="card" id="weatherCurrent">
+        <h2>Trenutna prognoza</h2>
+        <div class="weather-main">
+          <div>
+            <div id="weatherTemp" class="weather-temp">--°C</div>
+            <div id="weatherDesc" class="weather-desc">Učitavanje...</div>
           </div>
-          <div class="weather-main-extra">
-            <div><span class="key">Osjećaj:</span> <span id="weather-feels">--°C</span></div>
-            <div><span class="key">Vjetar:</span> <span id="weather-wind">-- km/h</span></div>
-            <div><span class="key">Vlaga:</span> <span id="weather-humidity">-- %</span></div>
-          </div>
-        </div>
-
-        <div class="weather-details">
-          <dl>
-            <dt>Minimalna danas</dt>
-            <dd id="weather-min">--°C</dd>
-          </dl>
-          <dl>
-            <dt>Maksimalna danas</dt>
-            <dd id="weather-max">--°C</dd>
-          </dl>
-          <dl>
-            <dt>Ažurirano</dt>
-            <dd id="weather-updated">--</dd>
-          </dl>
-          <dl>
-            <dt>Izvor</dt>
-            <dd>Open-Meteo (Vrbnik)</dd>
+          <dl class="weather-details">
+            <div><dt>Osjećaj</dt><dd id="weatherFeels">--°C</dd></div>
+            <div><dt>Vjetar</dt><dd id="weatherWind">-- km/h</dd></div>
+            <div><dt>Vlaga</dt><dd id="weatherHumidity">-- %</dd></div>
           </dl>
         </div>
-      </article>
+        <p class="weather-updated">Ažurirano: <span id="weatherUpdated">--</span></p>
+      </section>
 
-      <article class="weather-forecast">
-        <div class="weather-forecast-header">
+      <section class="card">
+        <div class="card-header-row">
           <h2>Sljedeća 3 dana</h2>
-          <span class="badge-soft">Pregled tjedna</span>
+          <button class="secondary-btn" id="weatherRefresh">Osvježi</button>
         </div>
-        <ul id="forecast-list" class="d3-list">
-          <li class="d3-item">
-            <div class="d3-label"><span class="day">Dan 1</span><span class="icon">☁️</span></div>
-            <div class="d3-temp">--°C / --°C</div>
-          </li>
-          <li class="d3-item">
-            <div class="d3-label"><span class="day">Dan 2</span><span class="icon">☁️</span></div>
-            <div class="d3-temp">--°C / --°C</div>
-          </li>
-          <li class="d3-item">
-            <div class="d3-label"><span class="day">Dan 3</span><span class="icon">☁️</span></div>
-            <div class="d3-temp">--°C / --°C</div>
-          </li>
-        </ul>
-      </article>
+        <div id="weatherForecast" class="forecast-grid"></div>
+      </section>
 
-      <div class="refresh-row">
-        <button class="btn btn-soft btn-refresh" id="refresh-weather">
-          🔄 Osvježi prognozu
-        </button>
-      </div>
-
-      <p style="font-size:0.78rem;color:var(--text-soft);margin:2px 2px 0;">
-        Podaci se preuzimaju s Open-Meteo servisa za geolokaciju Vrbnika. Vrijednosti su informativne i mogu
-        odstupati od lokalnih mjerenja.
+      <p class="weather-note">
+        Podaci se preuzimaju s Open-Meteo servisa na temelju geolokacije Vrbnika.
+        Vrijednosti su informativne i mogu odstupati od lokalnih mjerenja.
       </p>
-    </section>
-  </main>
-  <script src="js/weather.js"></script>
-
+    </main>
   </div>
-  <script src="js/main.js"></script>
+
+  <script src="js/weather.js"></script>
 </body>
 </html>

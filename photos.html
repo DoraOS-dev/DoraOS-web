@@ -6,62 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="">
+<body class="app">
   <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <div class="brand">
-          <div class="brand__title">Dora Asistent</div>
-          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
-        </div>
-        <div class="device-status">
-          <span></span>
-          Uređaj spreman za korištenje
-        </div>
-      </div>
-      <div class="app-header__meta">
-        <div class="meta-line">
-          <strong>Danas:</strong>
-          <span id="meta-date"></span>
-        </div>
-        <div class="meta-line">
-          <strong>Na uređaju:</strong>
-          <span id="meta-time"></span>
-        </div>
-      </div>
+    <header class="app-header app-header--compact">
+      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
+      <h1 class="app-title">Foto album</h1>
     </header>
 
-  <main class="app-main">
-    <div class="weather-header">
-      <a href="index.html" class="back-link">⟵ Natrag</a>
-      <div>
-        <div class="page-title">Foto album</div>
-        <div class="page-subtitle">Slike se čuvaju samo na ovom uređaju</div>
-      </div>
-    </div>
+    <main class="app-main app-main--narrow">
+      <section class="card">
+        <p>Dodajte nekoliko dragih fotografija koje će Božo i Kristina moći gledati.</p>
+        <label class="primary-btn primary-btn--file">
+          📸 Dodaj fotografije
+          <input type="file" id="photoInput" accept="image/*" multiple hidden />
+        </label>
+      </section>
 
-    <section>
-      <div class="panel-soft">
-        <p><strong>Dodaj novu fotografiju</strong></p>
-        <p>
-          Pritisni gumb <strong>Dodaj fotografiju</strong>, izaberi sliku s uređaja i ona će se spremiti u
-          <code>localStorage</code>. Ništa se ne šalje na internet.
-        </p>
-        <button class="btn btn-primary" id="btn-add-photo">
-          <span class="icon">📸</span> Dodaj fotografiju
-        </button>
-        <button class="btn btn-ghost" id="btn-clear-photos" style="margin-left:6px;">
-          Obriši sve slike
-        </button>
-        <input type="file" id="file-input" accept="image/*" style="display:none;" />
-      </div>
-
-      <div id="photo-grid" class="photo-grid"></div>
-    </section>
-  </main>
-  <script src="js/photos.js"></script>
-
+      <section class="card">
+        <h2>Album</h2>
+        <div id="photoGrid" class="photo-grid"></div>
+        <button class="secondary-btn" id="clearPhotos">Obriši sve fotografije</button>
+      </section>
+    </main>
   </div>
-  <script src="js/main.js"></script>
+
+  <script src="js/photos.js"></script>
 </body>
 </html>

@@ -1,193 +1,89 @@
-const WEATHER_CACHE_KEY = "dora_weather_cache_v1";
-const WEATHER_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minuta
+// Dora Asistent – vrijeme za Vrbnik (Open-Meteo)
 
-const WEATHER_CONFIG = {
-  latitude: 45.076,
-  longitude: 14.675,
-  timezone: "Europe/Berlin"
-};
+const VRBNIK_LAT = 45.078;
+const VRBNIK_LON = 14.674;
 
-function resolveSkyIcon(code) {
-  if (code === 0) return "☀️";
-  if ([1, 2].includes(code)) return "🌤️";
-  if ([3].includes(code)) return "☁️";
-  if ([45, 48].includes(code)) return "🌫️";
-  if ([51, 53, 55, 61, 63, 65].includes(code)) return "🌧️";
-  if ([80, 81, 82].includes(code)) return "🌦️";
-  if ([71, 73, 75, 85, 86].includes(code)) return "❄️";
-  if ([95, 96, 99].includes(code)) return "⛈️";
-  return "☁️";
+function iconForCode(code) {
+  if ([0].includes(code)) return "☀️ Vedro";
+  if ([1, 2, 3].includes(code)) return "⛅ Oblačno";
+  if ([45, 48].includes(code)) return "🌫 Magla";
+  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return "🌧 Kiša";
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return "❄ Snijeg";
+  if ([95, 96, 99].includes(code)) return "⛈ Oluja";
+  return "☁ Nepoznato";
 }
 
-function resolveSkyText(code) {
-  const map = {
-    0: "Vedro",
-    1: "Pretežno vedro",
-    2: "Djelomično oblačno",
-    3: "Oblačno",
-    45: "Magla",
-    48: "Magla",
-    51: "Slaba kiša",
-    53: "Kiša",
-    55: "Jača kiša",
-    61: "Slaba kiša",
-    63: "Kiša",
-    65: "Jaka kiša",
-    71: "Snijeg",
-    73: "Snijeg",
-    75: "Gust snijeg",
-    80: "Pljuskovi",
-    81: "Pljuskovi",
-    82: "Jaki pljuskovi",
-    85: "Snijeg",
-    86: "Snijeg",
-    95: "Grmljavina",
-    96: "Grmljavina",
-    99: "Grmljavina"
-  };
-  return map[code] || "Promjenjivo";
-}
-
-function readWeatherCache() {
-  try {
-    const raw = localStorage.getItem(WEATHER_CACHE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed || !parsed.timestamp || !parsed.data) return null;
-    const age = Date.now() - parsed.timestamp;
-    if (age > WEATHER_CACHE_TTL_MS) return null;
-    return parsed.data;
-  } catch {
-    return null;
-  }
-}
-
-function writeWeatherCache(data) {
-  try {
-    localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({
-      timestamp: Date.now(),
-      data
-    }));
-  } catch {
-    // ignore
-  }
-}
-
-async function fetchWeatherFromApi() {
-  const { latitude, longitude, timezone } = WEATHER_CONFIG;
-  const url = new URL("https://api.open-meteo.com/v1/forecast");
-  url.searchParams.set("latitude", latitude);
-  url.searchParams.set("longitude", longitude);
-  url.searchParams.set("timezone", timezone);
-  url.searchParams.set("current_weather", "true");
-  url.searchParams.set("hourly", "relative_humidity_2m,apparent_temperature,wind_speed_10m");
-  url.searchParams.set("daily", "weathercode,temperature_2m_max,temperature_2m_min");
-  url.searchParams.set("forecast_days", "4");
-
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error("Ne mogu dohvatiti podatke o vremenu.");
+async function fetchWeather() {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${VRBNIK_LAT}&longitude=${VRBNIK_LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=4`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Greška pri dohvaćanju podataka");
   return res.json();
 }
 
-function formatUpdated(iso) {
-  const dt = new Date(iso);
-  const day = dt.getDate().toString().padStart(2, "0");
-  const month = (dt.getMonth() + 1).toString().padStart(2, "0");
-  const hour = dt.getHours().toString().padStart(2, "0");
-  const min = dt.getMinutes().toString().padStart(2, "0");
-  return `${day}.${month}. ${hour}:${min}`;
+function formatTemp(t) {
+  return `${Math.round(t)}°C`;
 }
 
-function applyWeatherToUi(payload) {
-  const current = payload.current_weather;
-  const daily = payload.daily;
+function renderWeather(data) {
+  const current = data.current;
+  const daily = data.daily;
 
-  const iconEl = document.getElementById("weather-icon");
-  const tempEl = document.getElementById("weather-temp");
-  const descEl = document.getElementById("weather-desc");
-  const feelsEl = document.getElementById("weather-feels");
-  const windEl = document.getElementById("weather-wind");
-  const humEl = document.getElementById("weather-humidity");
-  const minEl = document.getElementById("weather-min");
-  const maxEl = document.getElementById("weather-max");
-  const updEl = document.getElementById("weather-updated");
+  const tempEl = document.getElementById("weatherTemp");
+  const descEl = document.getElementById("weatherDesc");
+  const feelsEl = document.getElementById("weatherFeels");
+  const windEl = document.getElementById("weatherWind");
+  const humEl = document.getElementById("weatherHumidity");
+  const updEl = document.getElementById("weatherUpdated");
 
-  if (!current || !daily) return;
-
-  const icon = resolveSkyIcon(current.weathercode);
-  const text = resolveSkyText(current.weathercode);
-
-  if (iconEl) iconEl.textContent = icon;
-  if (tempEl) tempEl.textContent = `${Math.round(current.temperature)}°C`;
-  if (descEl) descEl.textContent = text;
-
-  const humidity = payload.hourly?.relative_humidity_2m?.[0];
-  const feels = payload.hourly?.apparent_temperature?.[0];
-  const wind = payload.hourly?.wind_speed_10m?.[0] ?? current.windspeed;
-
-  if (feelsEl && typeof feels === "number") feelsEl.textContent = `${Math.round(feels)}°C`;
-  if (windEl && typeof wind === "number") windEl.textContent = `${Math.round(wind)} km/h`;
-  if (humEl && typeof humidity === "number") humEl.textContent = `${Math.round(humidity)} %`;
-
-  if (Array.isArray(daily.temperature_2m_min)) {
-    minEl.textContent = `${Math.round(daily.temperature_2m_min[0])}°C`;
+  if (tempEl) tempEl.textContent = formatTemp(current.temperature_2m);
+  if (descEl) {
+    const label = iconForCode(current.weather_code);
+    descEl.textContent = label.replace(/^[^ ]+\s?/, ""); // samo opis
   }
-  if (Array.isArray(daily.temperature_2m_max)) {
-    maxEl.textContent = `${Math.round(daily.temperature_2m_max[0])}°C`;
-  }
+  if (feelsEl) feelsEl.textContent = formatTemp(current.apparent_temperature);
+  if (windEl) windEl.textContent = `${Math.round(current.wind_speed_10m)} km/h`;
+  if (humEl) humEl.textContent = `${current.relative_humidity_2m} %`;
+  if (updEl) updEl.textContent = new Date(current.time).toLocaleString("hr-HR");
 
-  if (updEl) updEl.textContent = formatUpdated(current.time);
-
-  const listEl = document.getElementById("forecast-list");
-  if (!listEl) return;
-
-  const days = ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"];
-  listEl.innerHTML = "";
+  const fcEl = document.getElementById("weatherForecast");
+  if (!fcEl) return;
+  fcEl.innerHTML = "";
 
   for (let i = 1; i <= 3; i++) {
-    const dateIso = daily.time[i];
-    const tMin = daily.temperature_2m_min[i];
-    const tMax = daily.temperature_2m_max[i];
-    const code = daily.weathercode[i];
-
-    const dt = new Date(dateIso);
-    const label = days[dt.getDay()];
-
-    const li = document.createElement("li");
-    li.className = "d3-item";
-    li.innerHTML = `
-      <div class="d3-label">
-        <span class="day">${label}</span>
-        <span class="icon">${resolveSkyIcon(code)}</span>
-      </div>
-      <div class="d3-temp">${Math.round(tMin)}°C / ${Math.round(tMax)}°C</div>
+    const day = document.createElement("div");
+    day.className = "forecast-day";
+    const date = new Date(daily.time[i]);
+    const name = date.toLocaleDateString("hr-HR", { weekday: "short" });
+    const label = iconForCode(daily.weather_code[i]).split(" ")[1] || "";
+    day.innerHTML = `
+      <div>${name}</div>
+      <div style="font-size:1.2rem;margin-top:0.1rem;">${label}</div>
+      <div class="forecast-day__temp">${formatTemp(daily.temperature_2m_min[i])} – ${formatTemp(
+      daily.temperature_2m_max[i]
+    )}</div>
     `;
-    listEl.appendChild(li);
+    fcEl.appendChild(day);
   }
 }
 
-async function refreshWeather(options = { force: false }) {
-  const cached = !options.force && readWeatherCache();
-  if (cached) {
-    applyWeatherToUi(cached);
-    return;
-  }
+async function loadWeather() {
+  const card = document.getElementById("weatherCurrent");
+  if (card) card.classList.add("loading");
 
   try {
-    const data = await fetchWeatherFromApi();
-    writeWeatherCache(data);
-    applyWeatherToUi(data);
-  } catch (err) {
-    console.error(err);
-    const descEl = document.getElementById("weather-desc");
-    if (descEl) descEl.textContent = "Ne mogu dohvatiti prognozu (provjeri mrežu).";
+    const data = await fetchWeather();
+    renderWeather(data);
+  } catch (e) {
+    console.error(e);
+    const descEl = document.getElementById("weatherDesc");
+    if (descEl) descEl.textContent = "Ne mogu dohvatiti podatke.";
+  } finally {
+    if (card) card.classList.remove("loading");
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  refreshWeather();
-  const btn = document.getElementById("refresh-weather");
-  if (btn) {
-    btn.addEventListener("click", () => refreshWeather({ force: true }));
-  }
+  loadWeather();
+  const refreshBtn = document.getElementById("weatherRefresh");
+  if (refreshBtn) refreshBtn.addEventListener("click", loadWeather);
 });

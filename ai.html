@@ -2,52 +2,25 @@
 <html lang="hr">
 <head>
   <meta charset="UTF-8" />
-  <title>Dora pomoć – Dora Asistent</title>
+  <title>Dora pomoć (AI)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="">
+<body class="app">
   <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <div class="brand">
-          <div class="brand__title">Dora Asistent</div>
-          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
-        </div>
-        <div class="device-status">
-          <span></span>
-          Uređaj spreman za korištenje
-        </div>
-      </div>
-      <div class="app-header__meta">
-        <div class="meta-line">
-          <strong>Danas:</strong>
-          <span id="meta-date"></span>
-        </div>
-        <div class="meta-line">
-          <strong>Na uređaju:</strong>
-          <span id="meta-time"></span>
-        </div>
-      </div>
+    <header class="app-header app-header--compact">
+      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
+      <h1 class="app-title">Dora pomoć</h1>
     </header>
-
-  <main class="app-main">
-    <div class="weather-header">
-      <a href="index.html" class="back-link">⟵ Natrag</a>
-      <div>
-        <div class="page-title">Dora pomoć</div>
-        <div class="page-subtitle">AI pomoćnik za obitelj</div>
-      </div>
-    </div>
-    <section>
-      <div class="panel-soft">
-        <p><strong>Ova stranica će kasnije dobiti punu funkcionalnost.</strong></p>
-        <p>Kasnije će se ova stranica povezati s DoraOS GPT pomoćnikom za pitanja i upute.</p>
-      </div>
-    </section>
-  </main>
-
+    <main class="app-main app-main--narrow">
+      <section class="card">
+        <p>
+          Ovdje će kasnije biti poveznica na pametnu Dora pomoć (AI) koja može
+          odgovarati na pitanja, podsjećati na lijekove i pojašnjavati upute liječnika.
+        </p>
+        <p>Za sada je ovo samo informativna stranica.</p>
+      </section>
+    </main>
   </div>
-  <script src="js/main.js"></script>
 </body>
 </html>

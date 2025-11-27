@@ -2,52 +2,22 @@
 <html lang="hr">
 <head>
   <meta charset="UTF-8" />
-  <title>Obitelj – Dora Asistent</title>
+  <title>Poruke od obitelji – Dora Asistent</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="">
+<body class="app">
   <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <div class="brand">
-          <div class="brand__title">Dora Asistent</div>
-          <div class="brand__subtitle">Virtualni skrbnik za Božu i Kristinu</div>
-        </div>
-        <div class="device-status">
-          <span></span>
-          Uređaj spreman za korištenje
-        </div>
-      </div>
-      <div class="app-header__meta">
-        <div class="meta-line">
-          <strong>Danas:</strong>
-          <span id="meta-date"></span>
-        </div>
-        <div class="meta-line">
-          <strong>Na uređaju:</strong>
-          <span id="meta-time"></span>
-        </div>
-      </div>
+    <header class="app-header app-header--compact">
+      <button class="back-btn" onclick="window.location.href='index.html'">← Natrag</button>
+      <h1 class="app-title">Poruke od obitelji</h1>
     </header>
-
-  <main class="app-main">
-    <div class="weather-header">
-      <a href="index.html" class="back-link">⟵ Natrag</a>
-      <div>
-        <div class="page-title">Obiteljske postavke</div>
-        <div class="page-subtitle">Kontakti, fotografije, poruke</div>
-      </div>
-    </div>
-    <section>
-      <div class="panel-soft">
-        <p><strong>Ova stranica će kasnije dobiti punu funkcionalnost.</strong></p>
-        <p>Stranica za administraciju sadržaja za obitelj (kontakti, fotografije, poruke).</p>
-      </div>
-    </section>
-  </main>
-
+    <main class="app-main app-main--narrow">
+      <section class="card">
+        <p>Ovdje se kasnije mogu spremati audio ili tekstualne poruke od obitelji.</p>
+        <p>Za sada upišite kratke poruke ručno i ažurirajte ih prema potrebi.</p>
+      </section>
+    </main>
   </div>
-  <script src="js/main.js"></script>
 </body>
 </html>
